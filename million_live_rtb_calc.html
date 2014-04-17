@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>みりますRTB計算</title>
+</head>
+<body>
+<!--日付変更にmomentjisを使用、ろーかるで動かすにはhttp://momentjs.com/　が必要-->
+<script type="text/javascript" src="./LIB/moment-with-langs.js"></script>
+<script type="text/javascript">
+<!--
+	var RTBs = function () {
+    	this.t="";
+		this.a = 0;
+		this.b = 0;
+		this.c = 0;
+		this.d = 0;
+	};
+	
+	
+
+	function stringfilter(text){
+	
+    var RTB = [];
+	var rt= document.asc2hex.event.options[document.asc2hex.event.selectedIndex].text;
+	var tf=document.tt.time.options[document.tt.time.selectedIndex].text;
+
+	if(tf.indexOf("時刻表記")>0){
+	tf="YYYY/MM/DD HH:mm";
+	}
+	
+	text=text.replace(new RegExp(rt, 'g'), "XX:XX");
+	var lf = text.split("\n");
+	var str ="";
+	var st="";
+	var btmp=[0,0,0,0,0];
+	var head=new Array("1位","100位","1200位","3000位");
+	
+    regrank = new RegExp("(1|[0-9]+0)位[ 　\t]+([0-9]+(,[0-9]{3})*)");
+    rgr = new RegExp("([0-9]+0?位.*?\n)+※");
+    regdt = new RegExp("※([0-9]{2}/[0-9]{2}).*?([0-9]{2}:[0-9]{2}) 集計時点");
+    var k=0,t=-4;
+	
+	var matches = text.match(rgr);
+	if(matches !=null){
+	//なんとか位を拾う
+	var mm=matches[0].match(/[0-9]+位/gm)
+	for(var i=0;i<mm.length;i++){
+	head[i]=mm[i];
+	if(i==3){ break;}
+	}
+	}
+
+for( var i = 0 , l = lf.length; i < l ; i++ ){
+ 		str= lf[i];
+		if(str.match(regrank)){
+		var xx = str.match(regrank);
+		if(t>=-4 && t<0){
+		btmp[t+4]=rmc(xx[2]);
+		t++;
+		}		
+		}
+		else if(str.match(regdt)){
+		var xx = str.match(regdt);
+		
+		 RTB[k] = new RTBs();
+		 RTB[k].t= tmcv("2014/"+xx[1]+" "+xx[2],tf);
+		 RTB[k].a=btmp[0];
+		 RTB[k].b=btmp[1];
+		 RTB[k].c=btmp[2];
+		 RTB[k].d=btmp[3];
+		 k++;
+		 t=-4;
+		}
+		else{
+		 t=-4;
+		}
+}
+	
+
+	var ch1=document.r1.elements[0].checked;
+	var ch2=document.r2.elements[0].checked;
+	var ch3=document.r3.elements[0].checked;
+	var ch4=document.r4.elements[0].checked;
+
+	
+	if(ch4){
+	st= "\n"+ st + head[3] +"\n";
+	for( var i = 0 , l = RTB.length; i < l-1 ; i++ ){
+	if(RTB[i+1].t!=""){
+	 st = st + RTB[i+1].t +" " + RTB[i+1].d + "(+" + (RTB[i+1].d-RTB[i].d) + ")\n";
+	 }
+	}
+	}
+	
+	if(ch3){
+	st= "\n"+st + head[2] +"\n";
+	for( var i = 0 , l = RTB.length; i < l-1 ; i++ ){
+	if(RTB[i+1].t!=""){
+	 st = st + RTB[i+1].t +" " + RTB[i+1].c + "(+" + (RTB[i+1].c-RTB[i].c) + ")\n";
+	 }
+	}
+	}
+	if(ch2){
+	st= "\n"+st + head[1] +"\n";
+	for( var i = 0 , l = RTB.length; i < l-1 ; i++ ){
+	if(RTB[i+1].t!=""){
+	 st = st + RTB[i+1].t +" " + RTB[i+1].b + "(+" + (RTB[i+1].b-RTB[i].b) + ")\n";
+	 }
+	}
+	}
+	if(ch1){
+	st= "\n"+st + head[0] +"\n";
+	for( var i = 0 , l = RTB.length; i < l-1 ; i++ ){
+	if(RTB[i+1].t!=""){
+	 st = st + RTB[i+1].t +" " + RTB[i+1].a + "(+" + (RTB[i+1].a-RTB[i].a) + ")\n";
+	 }
+	}
+	}
+
+		document.cvcode.elements[0].value = st;
+		return false;
+	}
+
+	function rmc(a){
+	return parseInt(a.replace(new RegExp(",", 'g'), ""));
+	}
+	
+	function browserLanguage() {
+  try {
+    return (navigator.browserLanguage || navigator.language || navigator.userLanguage).substr(0,2)
+  }
+  catch(e) {
+    return undefined;
+  }
+}
+	
+	function tmcv(dt,tf){
+	var m = moment(dt,"YYYY/MM/DD HH:mm");
+	return m.format(tf);
+	}
+-->
+</script>
+
+<p>いべとっぷのぼだすこあ部分を貼り付け</p>
+
+<form name="r1">
+<input type="checkbox" value="S1">ランク１<br>
+</form>
+<form name="r2">
+<input type="checkbox" value="S2">ランク２<br>
+</form>
+<form name="r3">
+<input type="checkbox" value="S3">ランク３<br>
+</form>
+<form name="r4">
+<input type="checkbox" value="S4">ランク４<br>
+</form>
+<form name="tt">
+<select name="time">
+<option value="">/時刻表記/</option>
+<option value="">YYYY/MM/DD HH:mm</option>
+<option value="">YYYY-MM-DD HH:mm</option>
+<option value="">YYYY年MM月DD日 HH時mm分</option>
+<option value="">YY/MM/DD HH:mm</option>
+<option value="">YY-MM-DD HH:mm</option>
+<option value="">YY年MM月DD日 HH時mm分</option>
+<option value="">MM/DD/YYYY HH:mm</option>
+<option value="">MM-DD-YYYY HH:mm</option>
+<option value="">MM/DD/YY HH:mm</option>
+<option value="">MM-DD-YY HH:mm</option>
+<option value="">MM/DD HH:mm</option>
+<option value="">MM-DD HH:mm</option>
+<option value="">MM月DD日 HH時mm分</option>
+<option value="">HH:mm</option>
+</select><br>
+</form>
+<form name="asc2hex">
+<select name="event">
+<option value="">/時刻正規/</option>
+<option value="">(※5分毎)?[0-9]{2}:[0-5][1-46-9]</option>
+<option value="">(※10分毎)?[0-9]{2}:[0-5][1-9]</option>
+<option value="">(※20分毎)?[0-9]{2}:([135][0-9]|[024][1-9])</option>
+<option value="">(※30分毎)?[0-9]{2}:([1245][0-9]|[03][1-9])</option>
+<option value="">(※1時間毎)?[0-9]{2}:(0[1-9]|[1-5][0-9])</option>
+</select><br>
+<textarea name="text" rows="10" cols="50"></textarea><br>
+<input type="Submit" value="Convert" Generate" onclick="stringfilter(document.asc2hex.text.value);return false">
+<input type="reset" value="Clear">
+</form>
+<form name="cvcode">
+<textarea name="text" rows="10" cols="50"></textarea>
+</form>
+<br>
+更新履歴<br>
+2014/04/17<br>
+日付変更を追加、らいぶらりmoment.jsを使用<br>
+NETAで作成、C#→JSに移植しただけ<br>
+過去いべでたなら<a href="http://millionlive-border-records.googlecode.com/">SVN</a>に存在<br>
+by(ﾟ∀ﾟ)えれな道場
+</body>
+</html>
