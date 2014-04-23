@@ -7,6 +7,7 @@
 textarea {
 max-width:400px;
 max-height:100px;
+resize: none;
 }
 -->
 </STYLE>
@@ -15,6 +16,8 @@ max-height:100px;
 <body>
 <!--日付変更にmomentjisを使用、ろーかるで動かすにはhttp://momentjs.com/　が必要-->
 <script type="text/javascript" src="./LIB/moment-with-langs.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="./LIB/xdomain.js"></script>
 <script type="text/javascript">
 <!--
 	var RTBs = function (_t,_a,_b,_c,_d,_e) {
@@ -58,8 +61,11 @@ max-height:100px;
 	text=text.replace(new RegExp(rt, 'g'), "XX:XX");
 	}
 	
-	//泥の標準ぶらうざだと改行ぬけるので対策、else配列=-4は廃止
-	text=text.replace(new RegExp("[ 　\t]+pt[ 　\t]+","gm")," pt\n");
+	//泥の標準ぶらうざだと改行ぬけるので対策+整形
+	text=text.replace(new RegExp("[ 　\t]+pt[ 　\t]+","gm")," pt\n")
+	         .replace(new RegExp("[ 　\t]+([0-9]+位)","gm"),"\n$1")
+	         .replace(new RegExp("^[ 　\t]+","gm"),"")
+	         .replace(new RegExp("\n+","gm"),"\n");
 	
 	var lf = text.split("\n");
 	var str ="";
@@ -118,9 +124,9 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 		 k++;
 		 t=-4;
 		}
-		//else if(str!=null){
-		//t=-4; //一部あんどろ用修正で2段改行になりりせっとされてしまうので無効
-		//}     //( pt \nのとき→ pt \n\n)
+		else if(str!=null){
+		t=-4;
+		}
 }
 
 	var swap=document.tsort.event.selectedIndex;
@@ -313,6 +319,12 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	tf=tf.replace("J","");
 	m.lang("ja");
 	}
+	if(tf.indexOf("d")>0){//平成対策
+	var day= tf.match(/d+/g);
+	if(day!=null){
+	tf=tf.replace(new RegExp(day[0],"g"),"["+m.format(day[0])+"]");
+	}
+	}
 	if(tf.indexOf("Ｈ")>0){//Ｈ平成に変換
 	tf=tf.replace("Ｈ","YY");
 	//m.add('years', -1988);
@@ -323,6 +335,56 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	}
 	return m.format(tf);
 	}
+	
+  //タグ抜き、なぜかあんどろのぶらうざのこぴぺだと</tr>がスペースになる模様
+  function rmhtml(a){
+  a=a.replace(new RegExp("\</td\>", 'gm'), "\t");
+  a=a.replace(new RegExp("\<br/?\>", 'gm'), "\n");
+  a=a.replace(new RegExp("\</p\>", 'gm'), "\n")
+  a=a.replace(new RegExp("\</tr\>", 'gm'), "\n");
+  a=a.replace(new RegExp("\<.*?\>", 'gm'), "");
+  return a;
+  }
+   
+   function fix_url(a){
+    if(a.indexOf("http")>=0){
+     //nop
+    }
+    else if(a.indexOf("ttp")>=0){
+     a = "h"+a;
+    }
+    else{
+     a= "http"+a;
+    }
+    
+    
+    return a;
+   }
+   
+  //うらる取得にxdomainajax+jquery使用
+  //http://stackoverflow.com/questions/12429833/using-jquery-plugin-xdomainajax-js-for-cross-domain-ajax-calls-only-one-website
+  //https://github.com/padolsey/jquery.fn/tree/master/cross-domain-ajax
+  function getweb(urls){
+  var urlm=urls.match(/(h?ttps?)?(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/)
+  if(urlm!=null){
+  var your_url=fix_url(urlm[0]);
+  var text ="";
+	$.ajax({
+	//beforeSend: function(res){
+	//	 res.overrideMimeType("text/html;charset=Shift_JIS");
+	//},
+    url: your_url,
+    type: 'GET',
+    timeout: 10000,
+    success: function(res) {
+        text = res.responseText;
+		stringfilter(rmhtml(text));
+    }
+	});
+	}
+  return false;
+  }
+	
 -->
 </script>
 
@@ -410,6 +472,7 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 <form name="rtbcode">
 <textarea name="text" rows="10" cols="100"></textarea><br>
 <input type="Submit" value="Convert" Generate" onclick="stringfilter(document.rtbcode.text.value);return false">
+<input type="Submit" value="URLcvt" Generate" onclick="getweb(document.rtbcode.text.value);return false">
 <input type="reset" value="Clear">
 </form>
 <form name="cvcode">
@@ -417,6 +480,13 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 </form>
 <p>
 更新履歴<br>
+2014/04/24<br>
+平成出力の場合曜日がずれてたので修正<br>
+2014/04/23<br>
+変換できるようにSVNのでーたをUTF8に統一<br>
+うらるから直接変換できるようにした(らいぶらりxdomain+jquery)<br>
+例パース成功:雑談スレ70<br>
+http://jbbs.shitaraba.net/bbs/read.cgi/netgame/11985/1397658675/<br>
 2014/04/22<br>
 webkit系はフォームが勝手に伸縮できてしまうのでCSSでいじれないように変更<br>
 時刻ソートに対応,昇順/降順選択可能<br>
