@@ -6,7 +6,7 @@
 <!--
 textarea {
 max-width:400px;
-max-height:100px;
+max-height:200px;
 resize: none;
 }
 -->
@@ -35,17 +35,33 @@ resize: none;
 	var rt= document.trg.event.options[document.trg.event.selectedIndex].text;
 	var tf=document.tt.time.options[document.tt.time.selectedIndex].text;
 	var tf2=document.DD.dy.options[document.DD.dy.selectedIndex].text;
+	var tz=document.tzone.owata.options[document.tzone.owata.selectedIndex].text;
 	var BYEAR=document.YN.yn.options[document.YN.yn.selectedIndex].text;
 	var BYEARN="";
 	var tosikosi=false;
 	if(text.indexOf("※12/31")>0 && text.indexOf("※01/01")>0 ){
 	 tosikosi = true;
+	 }
+	 
+	var tzm =tz.match(/-?\d+/g);
+	var t_offset=0;
+	var t_offset_min=0;
+	if(tzm!=null){
+	 t_offset=parseInt(tzm[0]);
+	 if(tzm[1]!=null){
+	 t_offset_min=(parseInt(tzm[1]));
+	  if(t_offset<0){
+	  t_offset_min=-t_offset_min;
+	  }
+	 }
+	 }
+	 
 	var bym =BYEAR.match(/-?\d+/);
 	if(bym!=null){
 	var y=parseInt(bym[0]);
 	 BYEARN=String(y+1);
 	 }
-	}
+
 	var TYEAR=BYEAR+"/";
 	
 	if(document.DD.dy.selectedIndex>0){
@@ -73,11 +89,11 @@ resize: none;
 	var btmp=[0,0,0,0,0];
 	var head=new Array("1位","100位","1200位","3000位","自速");
 	
-    regrank = new RegExp("(1|[0-9]+0)位[ 　\t]+([0-9]+(,[0-9]{3})*)[ 　\t]+pt");
-    regownpace = new RegExp(".*?pt[ 　\t]+([0-9]+(,[0-9]{3})*)[ 　\t]+pt");
-    rgr = new RegExp("([0-9]+0?位.*?\n)+※");
-    regdt = new RegExp("※([0-9]{2}/[0-9]{2}).*?([0-9]{2}:[0-9]{2}) 集計時点");
-    var k=0,t=-4;
+	var regrank = new RegExp("(1|[0-9]+0)位[ 　\t]+([0-9]+(,[0-9]{3})*)[ 　\t]+pt");
+	var regownpace = new RegExp(".*?pt[ 　\t]+([0-9]+(,[0-9]{3})*)[ 　\t]+pt");
+	var rgr = new RegExp("([0-9]+0?位.*?\n)+※");
+	var regdt = new RegExp("※([0-9]{2}/[0-9]{2}).*?([0-9]{2}:[0-9]{2}) 集計時点");
+	var k=0,t=-4;
 	
 	var matches = text.match(rgr);
 	if(matches !=null){
@@ -114,13 +130,7 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 		}
 		}
 		
-		 RTB[k] = new RTBs("",0,0,0,0,0);
-		 RTB[k].t= tmcv(TYEAR+"/"+xx[1]+" "+xx[2],tf);
-		 RTB[k].a=btmp[0];
-		 RTB[k].b=btmp[1];
-		 RTB[k].c=btmp[2];
-		 RTB[k].d=btmp[3];
-		 RTB[k].e=btmp[4];
+		 RTB[k] = new RTBs((TYEAR+xx[1]+" "+xx[2]),btmp[0],btmp[1],btmp[2],btmp[3],btmp[4]);
 		 k++;
 		 t=-4;
 		}
@@ -128,6 +138,10 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 		t=-4;
 		}
 }
+
+
+	//t1=new Date().getTime();
+
 
 	var swap=document.tsort.event.selectedIndex;
 	if(document.tsort.event.selectedIndex>0){
@@ -173,24 +187,24 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 		}
 	}
 	
-	
+
 	if(ch[4]){
 	st= "\n"+ st + head[4] +"\n";
 	if(!swap){
-	st = st + RTB[j].t +"\t" + cmsuuji(ac,RTB[j].e) +"\n";
+	st = st + tmcv(RTB[j].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[j].e) +"\n";
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i+1].t!=""){
-	 	st = st + RTB[i+1].t +"\t" + cmsuuji(ac,RTB[i+1].e) + "(+" + cmsuuji(ac,RTB[i+1].e-RTB[i].e) + ")\n";
+	 	st = st + tmcv(RTB[i+1].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i+1].e) + "(+" + cmsuuji(ac,RTB[i+1].e-RTB[i].e) + ")\n";
 	 	}
 	 	}
 	}
 	else if(swap){
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i].t!=""){
-	 	st = st + RTB[i].t +"\t" + cmsuuji(ac,RTB[i].e) + "(+" + cmsuuji(ac,RTB[i].e-RTB[i+1].e) + ")\n";
+	 	st = st + tmcv(RTB[i].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i].e) + "(+" + cmsuuji(ac,RTB[i].e-RTB[i+1].e) + ")\n";
 	 	}
 		}
-	st = st + RTB[l].t +"\t" + cmsuuji(ac,RTB[l].e) +"\n";
+	st = st + tmcv(RTB[l].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[l].e) +"\n";
 	}
 	}
 	
@@ -198,20 +212,20 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	if(ch[3]){
 	st= "\n"+ st + head[3] +"\n";
 	if(!swap){
-	st = st + RTB[j].t +"\t" + cmsuuji(ac,RTB[j].d) +"\n";
+	st = st + tmcv(RTB[j].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[j].d) +"\n";
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i+1].t!=""){
-	 	st = st + RTB[i+1].t +"\t" + cmsuuji(ac,RTB[i+1].d) + "(+" + cmsuuji(ac,RTB[i+1].d-RTB[i].d) + ")\n";
+	 	st = st + tmcv(RTB[i+1].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i+1].d) + "(+" + cmsuuji(ac,RTB[i+1].d-RTB[i].d) + ")\n";
 	 	}
 	 	}
 	}
 	else if(swap){
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i].t!=""){
-	 	st = st + RTB[i].t +"\t" + cmsuuji(ac,RTB[i].d) + "(+" + cmsuuji(ac,RTB[i].d-RTB[i+1].d) + ")\n";
+	 	st = st + tmcv(RTB[i].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i].d) + "(+" + cmsuuji(ac,RTB[i].d-RTB[i+1].d) + ")\n";
 	 	}
 		}
-	st = st + RTB[l].t +"\t" + cmsuuji(ac,RTB[l].d) +"\n";
+	st = st + tmcv(RTB[l].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[l].d) +"\n";
 	}
 	}
 	
@@ -219,20 +233,20 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	if(ch[2]){
 	st= "\n"+ st + head[2] +"\n";
 	if(!swap){
-	st = st + RTB[j].t +"\t" + cmsuuji(ac,RTB[j].c) +"\n";
+	st = st + tmcv(RTB[j].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[j].c) +"\n";
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i+1].t!=""){
-	 	st = st + RTB[i+1].t +"\t" + cmsuuji(ac,RTB[i+1].c) + "(+" + cmsuuji(ac,RTB[i+1].c-RTB[i].c) + ")\n";
+	 	st = st + tmcv(RTB[i+1].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i+1].c) + "(+" + cmsuuji(ac,RTB[i+1].c-RTB[i].c) + ")\n";
 	 	}
 	 	}
 	}
 	else if(swap){
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i].t!=""){
-	 	st = st + RTB[i].t +"\t" + cmsuuji(ac,RTB[i].c) + "(+" + cmsuuji(ac,RTB[i].c-RTB[i+1].c) + ")\n";
+	 	st = st + tmcv(RTB[i].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i].c) + "(+" + cmsuuji(ac,RTB[i].c-RTB[i+1].c) + ")\n";
 	 	}
 		}
-	st = st + RTB[l].t +"\t" + cmsuuji(ac,RTB[l].c) +"\n";
+	st = st + tmcv(RTB[l].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[l].c) +"\n";
 	}
 	}
 	
@@ -240,20 +254,20 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	if(ch[1]){
 	st= "\n"+ st + head[1] +"\n";
 	if(!swap){
-	st = st + RTB[j].t +"\t" + cmsuuji(ac,RTB[j].b) +"\n";
+	st = st + tmcv(RTB[j].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[j].b) +"\n";
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i+1].t!=""){
-	 	st = st + RTB[i+1].t +"\t" + cmsuuji(ac,RTB[i+1].b) + "(+" + cmsuuji(ac,RTB[i+1].b-RTB[i].b) + ")\n";
+	 	st = st + tmcv(RTB[i+1].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i+1].b) + "(+" + cmsuuji(ac,RTB[i+1].b-RTB[i].b) + ")\n";
 	 	}
 	 	}
 	}
 	else if(swap){
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i].t!=""){
-	 	st = st + RTB[i].t +"\t" + cmsuuji(ac,RTB[i].b) + "(+" + cmsuuji(ac,RTB[i].b-RTB[i+1].b) + ")\n";
+	 	st = st + tmcv(RTB[i].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i].b) + "(+" + cmsuuji(ac,RTB[i].b-RTB[i+1].b) + ")\n";
 	 	}
 		}
-	st = st + RTB[l].t +"\t" + cmsuuji(ac,RTB[l].b) +"\n";
+	st = st + tmcv(RTB[l].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[l].b) +"\n";
 	}
 	}
 	
@@ -261,24 +275,30 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	if(ch[0]){
 	st= "\n"+ st + head[0] +"\n";
 	if(!swap){
-	st = st + RTB[j].t +"\t" + cmsuuji(ac,RTB[j].a) +"\n";
+	st = st + tmcv(RTB[j].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[j].a) +"\n";
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i+1].t!=""){
-	 	st = st + RTB[i+1].t +"\t" + cmsuuji(ac,RTB[i+1].a) + "(+" + cmsuuji(ac,RTB[i+1].a-RTB[i].a) + ")\n";
+	 	st = st + tmcv(RTB[i+1].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i+1].a) + "(+" + cmsuuji(ac,RTB[i+1].a-RTB[i].a) + ")\n";
 	 	}
 	 	}
 	}
 	else if(swap){
 		for(i=j ; i < l ; i++ ){
 		if(RTB[i].t!=""){
-	 	st = st + RTB[i].t +"\t" + cmsuuji(ac,RTB[i].a) + "(+" + cmsuuji(ac,RTB[i].a-RTB[i+1].a) + ")\n";
+	 	st = st + tmcv(RTB[i].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[i].a) + "(+" + cmsuuji(ac,RTB[i].a-RTB[i+1].a) + ")\n";
 	 	}
 		}
-	st = st + RTB[l].t +"\t" + cmsuuji(ac,RTB[l].a) +"\n";
+	st = st + tmcv(RTB[l].t ,tf,t_offset,t_offset_min)+"\t" + cmsuuji(ac,RTB[l].a) +"\n";
 	}
-	}
+	}	
 	
+	
+	
+		//t2=new Date().getTime(); 
+	//st = st + (t2-t1)/1000)+"sec";
+
 	document.cvcode.elements[0].value = st;
+
 	return false;
 	}
 	
@@ -313,8 +333,15 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	}
 	
 	//momentjsで変換
-	function tmcv(dt,tf){
-	var m = moment(dt,"YYYY/MM/DD HH:mm");
+	function tmcv(dt,tf,t_offset,t_offset_min){
+	var m = moment(dt,"YYYY/MM/DD HH:mm");	
+	if(t_offset!=9 && t_offset_min!=0){
+	m.add('hours',-9);
+	m.add('hours',t_offset);
+	m.add('minutes',t_offset_min);
+	}
+	
+	
 	if(tf.indexOf("J")>0){//Jなら日本語曜日
 	tf=tf.replace("J","");
 	m.lang("ja");
@@ -333,19 +360,21 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	//2000年以上限定、1988=2000-12なので2087まで使える？
 	m.add('years', 12);
 	}
+	
 	return m.format(tf);
 	}
 	
   //タグ抜き、なぜかあんどろのぶらうざのこぴぺだと</tr>がスペースになる模様
   function rmhtml(a){
-  a=a.replace(new RegExp("\</td\>", 'gm'), "\t");
-  a=a.replace(new RegExp("\<br/?\>", 'gm'), "\n");
-  a=a.replace(new RegExp("\</p\>", 'gm'), "\n")
-  a=a.replace(new RegExp("\</tr\>", 'gm'), "\n");
-  a=a.replace(new RegExp("\<.*?\>", 'gm'), "");
+  a=a.replace(new RegExp("\</td\>", 'gm'), "\t")
+	.replace(new RegExp("\<br/?\>", 'gm'), "\n")
+	.replace(new RegExp("\</p\>", 'gm'), "\n")
+	.replace(new RegExp("\</tr\>", 'gm'), "\n")
+	.replace(new RegExp("\<.*?\>", 'gm'), "");
   return a;
   }
    
+   //h抜き
    function fix_url(a){
     if(a.indexOf("http")>=0){
      //nop
@@ -360,27 +389,39 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
     
     return a;
    }
-   
+
+ function parseData(data){
+        //do something with the data
+		stringfilter(rmhtml(data));
+    }
+
   //うらる取得にxdomainajax+jquery使用
   //http://stackoverflow.com/questions/12429833/using-jquery-plugin-xdomainajax-js-for-cross-domain-ajax-calls-only-one-website
   //https://github.com/padolsey/jquery.fn/tree/master/cross-domain-ajax
   function getweb(urls){
-  var urlm=urls.match(/(h?ttps?)?(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/)
-  if(urlm!=null){
-  var your_url=fix_url(urlm[0]);
-  var text ="";
-	$.ajax({
-	//beforeSend: function(res){
-	//	 res.overrideMimeType("text/html;charset=Shift_JIS");
-	//},
-    url: your_url,
-    type: 'GET',
-    timeout: 10000,
-    success: function(res) {
-        text = res.responseText;
+  var local= new RegExp("(\.\/[a-zA-Z0-9_\-]+)\.(txt|html)");
+  var uri= new RegExp("(h?ttps?)?(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)");
+  var lcmm=urls.match(local);
+  var urlm=urls.match(uri);
+  var text="";
+  var your_url="";
+  
+  if(lcmm!=null){
+  your_url=lcmm[0];
+    $.get(your_url,parseData);
+  }
+  else if(urlm!=null){
+  your_url=fix_url(urlm[0]);
+  text ="";
+		$.ajax({
+		url: your_url,
+		type: 'GET',
+		timeout: 10000,
+		success: function(res) {
+		text = res.responseText;
 		stringfilter(rmhtml(text));
-    }
-	});
+		}
+		});
 	}
   return false;
   }
@@ -395,8 +436,8 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 <form name="chbox">
 //出力対象<br>
 <input type="checkbox" value="S1">ランク１<br>
-<input type="checkbox" value="S2">ランク２<br>
-<input type="checkbox" value="S3">ランク３<br>
+<input type="checkbox" checked="checked" value="S2">ランク２<br>
+<input type="checkbox" checked="checked" value="S3">ランク３<br>
 <input type="checkbox" value="S4">ランク４<br>
 <input type="checkbox" value="OWN">自速<br>
 <input type="checkbox" value="ADDC">カンマ付き数字で出力<br>
@@ -404,37 +445,53 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 <form name="YN">
 //開始年<br>
 <select name="yn">
-<option value="">2014</option>
+<option selected="selected" value="">2014</option>
 <option value="">2015</option>
 </select>
 </form>
 <form name="tt">
 //日付時刻表記<br>
 <select name="time">
-<option value="">YYYY/MM/DD HH:mm</option>
+<option selected="selected" value="">YYYY/MM/DD HH:mm</option>
 <option value="">YYYY-MM-DD HH:mm</option>
 <option value="">YYYY年MM月DD日 HH時mm分</option>
+<option value="">YYYY/DD/MM HH:mm</option>
+<option value="">YYYY-DD-MM HH:mm</option>
 <option value="">YY/MM/DD HH:mm</option>
 <option value="">YY-MM-DD HH:mm</option>
+<option value="">Ｈ/MM/DD HH:mm</option>
+<option value="">Ｈ-MM-DD HH:mm</option>
+<option value="">YY/DD/MM HH:mm</option>
+<option value="">YY-DD-MM HH:mm</option>
+<option value="">Ｈ/DD/MM HH:mm</option>
+<option value="">Ｈ-DD-MM HH:mm</option>
 <option value="">YY年MM月DD日 HH時mm分</option>
 <option value="">[H]Ｈ年MM月DD日 HH時mm分</option>
 <option value="">平成Ｈ年MM月DD日 HH時mm分</option>
 <option value="">MM/DD/YYYY HH:mm</option>
 <option value="">MM-DD-YYYY HH:mm</option>
+<option value="">DD/MM/YYYY HH:mm</option>
+<option value="">DD-MM-YYYY HH:mm</option>
 <option value="">MM/DD/YY HH:mm</option>
-<option value="">MM/DD/Ｈ HH:mm</option>
 <option value="">MM-DD-YY HH:mm</option>
+<option value="">MM/DD/Ｈ HH:mm</option>
 <option value="">MM-DD-Ｈ HH:mm</option>
+<option value="">DD/MM/YY HH:mm</option>
+<option value="">DD-MM-YY HH:mm</option>
+<option value="">DD/MM/Ｈ HH:mm</option>
+<option value="">DD-MM-Ｈ HH:mm</option>
 <option value="">MM/DD HH:mm</option>
 <option value="">MM-DD HH:mm</option>
 <option value="">MM月DD日 HH時mm分</option>
+<option value="">DD/MM HH:mm</option>
+<option value="">DD-MM HH:mm</option>
 <option value="">HH:mm</option>
 </select>
 </form>
 <form name="DD">
 //曜日表記<br>
 <select name="dy">
-<option value=""></option>
+<option selected="selected" value=""></option>
 <option value="">ddd</option>
 <option value="">dddd</option>
 <option value="">dddJ</option>
@@ -453,7 +510,7 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 <option value="">(※10分毎)?[0-9]{2}:[0-5][1-9]</option>
 <option value="">(※20分毎)?[0-9]{2}:([135][0-9]|[024][1-9])</option>
 <option value="">(※30分毎)?[0-9]{2}:([1245][0-9]|[03][1-9])</option>
-<option value="">(※1時間毎)?[0-9]{2}:(0[1-9]|[1-5][0-9])</option>
+<option selected="selected" value="">(※1時間毎)?[0-9]{2}:(0[1-9]|[1-5][0-9])</option>
 <option value="">(※24時間毎,17時起点)?((0[0-9]|1[0-689]|2[0-4]):[0-9][0-9]|17:([1-9][0-9]|0[1-9]))</option>
 <option value="">(※24時間毎,0時起点)?((0[1-9]|1[0-9]|2[0-4]):[0-9][0-9]|00:([1-9][0-9]|0[1-9]))</option>
 </select>
@@ -461,8 +518,94 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 <form name="tsort">
 //時刻ソート<br>
 <select name="event">
-<option value="">昇順(古→新)</option>
+<option selected="selected" value="">昇順(古→新)</option>
 <option value="">降順(新→古)</option>
+</select>
+</form>
+<form name="tzone">
+<!-- 
+http://support.microsoft.com/kb/973627/ja
+M$より機械翻訳とはいえ
+マーシャル諸島します。
+。ニュージーランド
+がきになる
+ -->
+//タイムゾーン(サマータイム未対応)<br>
+<select name="owata">
+<option value="">UTC -12:00　国際日付変更線西側</option>
+<option value="">UTC -11:00　ミッドウェー島、サモア</option>
+<option value="">UTC -10:00　ハワイ</option>
+<option value="">UTC -09:00　アラスカ</option>
+<option value="">UTC -08:00　(米国およびカナダ　; ティファナティファナ</option>
+<option value="">UTC -07:00　山岳部標準時:(米国およびカナダ　</option>
+<option value="">UTC -07:00　チワワ、ラパス、マサトラン</option>
+<option value="">UTC -07:00　アリゾナ州</option>
+<option value="">UTC -06:00　中部標準:(米国およびカナダ　</option>
+<option value="">UTC -06:00　サスカチェワン</option>
+<option value="">UTC -06:00　グアダラハラ、メキシコシティ、モンテレー</option>
+<option value="">UTC -06:00　中央アメリカ</option>
+<option value="">UTC -05:00　(米国およびカナダ）、東部標準時</option>
+<option value="">UTC -05:00　インディアナ (東部　</option>
+<option value="">UTC -05:00　ボゴタ、リマ、Quito</option>
+<option value="">UTC -04:00　大西洋標準:(カナダ　</option>
+<option value="">UTC -04:00　ジョージタウン、ラパス、サンフアン</option>
+<option value="">UTC -04:00　サンティアゴ</option>
+<option value="">UTC -03:30　ニューファンドランド</option>
+<option value="">UTC -03:00　ブラジリア</option>
+<option value="">UTC -03:00　ジョージタウン</option>
+<option value="">UTC -03:00　グリーンランド</option>
+<option value="">UTC -02:00　中央大西洋</option>
+<option value="">UTC -01:00　アゾレス諸島</option>
+<option value="">UTC -01:00　カーボベルデ諸島</option>
+<option value="">UTC　ダブリン、エジンバラ、リスボン、ロンドン、グリニッジ標準時、世界協定時刻</option>
+<option value="">UTC　モンロビア、レイキャビク</option>
+<option value="">UTC +1:00　サニーベイル, カリフォルニア州、ブラチスラバ、ブダペスト、Ljubljana、プラハ</option>
+<option value="">UTC +1:00　サラエボ、Skopje、ワルシャワ、Zagreb</option>
+<option value="">UTC +1:00　ブリュッセル、コペンハーゲン、マドリッド、パリ</option>
+<option value="">UTC +1:00　アムステルダム、ベルリン、ベルン、ローマ、ストックホルム、ウィーン</option>
+<option value="">UTC +1:00　西中央アフリカ</option>
+<option value="">UTC +02:00　ミンスク</option>
+<option value="">UTC +02:00　カイロ</option>
+<option value="">UTC +02:00　ヘルシンキ、キエフ、リガ、ソフィア、Tallinn、Vilnius</option>
+<option value="">UTC +02:00　アテネ、ブカレスト、イスタンブール</option>
+<option value="">UTC +02:00　エルサレム</option>
+<option value="">UTC +02:00　ハラレ、プレトリア</option>
+<option value="">UTC +03:00　モスクワ、サンクト ペテルスブルグ、ボルゴグラード</option>
+<option value="">UTC +03:00　クウェート、リヤド</option>
+<option value="">UTC +03:00　ナイロビ</option>
+<option value="">UTC +03:00　バグダッド</option>
+<option value="">UTC +03:30　テヘラン</option>
+<option value="">UTC +04:00　アブダビ、マスカット</option>
+<option value="">UTC +04:00　バクー、トビリシ、エレバン</option>
+<option value="">UTC +04:30　カブール</option>
+<option value="">UTC +05:00　エカテリンブルク</option>
+<option value="">UTC +05:00　タシケント</option>
+<option value="">UTC +05:30　チェンナイ、カルカッタ、ムンバイ、ニューデリー</option>
+<option value="">UTC +05:45　カトマンズ</option>
+<option value="">UTC +06:00　アスタナ、ダッカ</option>
+<option value="">UTC +06:00　スリジャヤワルダナプラコッテ</option>
+<option value="">UTC +06:00　アルマアトイ、ノボシビルスク</option>
+<option value="">UTC +06:30　ヤンゴン (ラングーン　</option>
+<option value="">UTC +07:00　バンコク、ハノイ、ジャカルタ</option>
+<option value="">UTC +07:00　クラスノヤルスク</option>
+<option value="">UTC +08:00　北京、重慶、ホンコン、ウルムチ</option>
+<option value="">UTC +08:00　マレーシア. クアラルンプール、シンガポール</option>
+<option value="">UTC +08:00　台北</option>
+<option value="">UTC +08:00　パース</option>
+<option value="">UTC +08:00　イルクーツク、ウランバートル</option>
+<option value="">UTC +09:00　ソウル</option>
+<option selected="selected" value="">UTC +09:00　大阪、札幌、東京</option>
+<option value="">UTC +09:00　ヤクーツク</option>
+<option value="">UTC +09:30　ダーウィン</option>
+<option value="">UTC +09:30　アデレード</option>
+<option value="">UTC +10:00　キャンベラ、メルボルン、シドニー</option>
+<option value="">UTC +10:00　ブリスベン</option>
+<option value="">UTC +10:00　ホバート</option>
+<option value="">UTC +10:00　ウラジオ ストック</option>
+<option value="">UTC +10:00　グアム、ポートモレスビー</option>
+<option value="">UTC +11:00　マガダン、ソロモン諸島、ニューカレドニア</option>
+<option value="">UTC +12:00　フィジー、カムチャツカ、マーシャル諸島</option>
+<option value="">UTC +12:00　オークランド、ウェリントン</option>
 </select>
 </form>
 <form name="output">
@@ -470,16 +613,21 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 <input type="text" id="lim" value="0">
 </form><br>
 <form name="rtbcode">
-<textarea name="text" rows="10" cols="100"></textarea><br>
-<input type="Submit" value="Convert" Generate" onclick="stringfilter(document.rtbcode.text.value);return false">
-<input type="Submit" value="URLcvt" Generate" onclick="getweb(document.rtbcode.text.value);return false">
+<textarea name="r_text" rows="10" cols="200"></textarea><br>
+<input type="Submit" value="Convert" Generate" onclick="stringfilter(document.rtbcode.r_text.value);return false">
+<input type="Submit" value="URLcvt" Generate" onclick="getweb(document.rtbcode.r_text.value);return false">
 <input type="reset" value="Clear">
 </form>
 <form name="cvcode">
-<textarea name="text" rows="10" cols="100"></textarea>
+<textarea name="c_text" rows="10" cols="200"></textarea>
 </form>
 <p>
 更新履歴<br>
+2014/04/27<br>
+HH:mmのときソートが変になっていたので修正<br>
+時差変換を追加(サマータイムは未対応)<br>
+2014/04/26<br>
+FC2からFREEWEBに移動<br>
 2014/04/24<br>
 平成出力の場合曜日がずれてたので修正<br>
 2014/04/23<br>
