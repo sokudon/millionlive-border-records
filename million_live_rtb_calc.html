@@ -5,8 +5,8 @@
 <STYLE type="text/css">
 <!--
 textarea {
-max-width:400px;
-max-height:200px;
+max-width:500px;
+max-height:250px;
 resize: none;
 }
 -->
@@ -31,17 +31,19 @@ resize: none;
 	
 	function stringfilter(text){
 	
-	var RTB = [];//１日分なら配列1500ぐらい,いべ最大13日*24時間*60分=配列18720,dt　int5が8+4*5とするとMAXで524,160+TXT分
+	var RTB = [];//１日分なら配列1500ぐらい,いべ最大13日*24時間*60分=配列18720
 	var rt= document.trg.event.options[document.trg.event.selectedIndex].text;
 	var tf=document.tt.time.options[document.tt.time.selectedIndex].text;
-	var tf2=document.DD.dy.options[document.DD.dy.selectedIndex].text;
+	var day_index=document.DD.dy.selectedIndex;
 	var tz=document.tzone.owata.options[document.tzone.owata.selectedIndex].text;
 	var BYEAR=document.YN.yn.options[document.YN.yn.selectedIndex].text;
 	var BYEARN="";
+	var detectday =["","ddd","dddd","dddJ","(ddd)J","（ddd）J","ddddJ","(dddd)J","（dddd）J"];
+	
 	var tosikosi=false;
 	if(text.indexOf("※12/31")>0 && text.indexOf("※01/01")>0 ){
 	 tosikosi = true;
-	 }
+	}
 	 
 	var tzm =tz.match(/-?\d+/g);
 	var t_offset=0;
@@ -61,23 +63,37 @@ resize: none;
 	var y=parseInt(bym[0]);
 	 BYEARN=String(y+1);
 	 }
-
 	var TYEAR=BYEAR+"/";
-	
-	if(document.DD.dy.selectedIndex>0){
-	var tfs= tf.split("HH");
-	tf=tfs[0]+tf2+" HH"+tfs[1];
-	}
-	
+
 	if(tf==null){
 	tf="YYYY/MM/DD HH:mm"
 	}
+	//一般パターンからJSように変更
+	tf=tf.replace("2014","YYYY")
+		 .replace("14","YY")
+		 .replace("H","[H]")
+		 .replace("26","Ｈ")
+		 .replace("02","MM")
+		 .replace("27","DD")
+		 .replace("17:00","HH:mm")
+		 .replace("17時00分","HH時mm分");
+		 
+	moment.lang("en");
+	if(document.DD.dy.selectedIndex>0){
+	var tfs= tf.split("HH");
+	tf=tfs[0]+detectday[document.DD.dy.selectedIndex]+" HH"+tfs[1];
+		if(tf.indexOf("J")>0){//Jなら日本語曜日
+		tf=tf.replace("J","");
+		moment.lang("ja");
+		}
+	}	
 	
 	if(document.trg.event.selectedIndex>0){
 	text=text.replace(new RegExp(rt, 'g'), "XX:XX");
 	}
 	
 	//泥の標準ぶらうざだと改行ぬけるので対策+整形
+	//泥標準だとしたらば411すれまでしか変換できないっぽいのでちょろめやFFつかうのならいらないかも
 	text=text.replace(new RegExp("[ 　\t]+pt[ 　\t]+","gm")," pt\n")
 	         .replace(new RegExp("[ 　\t]+([0-9]+位)","gm"),"\n$1")
 	         .replace(new RegExp("^[ 　\t]+","gm"),"")
@@ -340,19 +356,13 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 	m.add('hours',t_offset);
 	m.add('minutes',t_offset_min);
 	}
-	
-	
-	if(tf.indexOf("J")>0){//Jなら日本語曜日
-	tf=tf.replace("J","");
-	m.lang("ja");
-	}
-	if(tf.indexOf("d")>0){//平成対策
+	if(tf.indexOf("d")>=0){//平成対策
 	var day= tf.match(/d+/g);
 	if(day!=null){
 	tf=tf.replace(new RegExp(day[0],"g"),"["+m.format(day[0])+"]");
 	}
 	}
-	if(tf.indexOf("Ｈ")>0){//Ｈ平成に変換
+	if(tf.indexOf("Ｈ")>=0){//Ｈ平成に変換
 	tf=tf.replace("Ｈ","YY");
 	//m.add('years', -1988);
 	
@@ -399,7 +409,7 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
   //http://stackoverflow.com/questions/12429833/using-jquery-plugin-xdomainajax-js-for-cross-domain-ajax-calls-only-one-website
   //https://github.com/padolsey/jquery.fn/tree/master/cross-domain-ajax
   function getweb(urls){
-  var local= new RegExp("(\.\/[a-zA-Z0-9_\-]+)\.(txt|html)");
+  var local= new RegExp("(\.\/[a-zA-Z0-9_\-]+)\.txt");
   var uri= new RegExp("(h?ttps?)?(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)");
   var lcmm=urls.match(local);
   var urlm=urls.match(uri);
@@ -429,7 +439,7 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 -->
 </script>
 
-<p>いべとっぷのぼだすこあ部分を貼り付け<br>
+<p>いべとっぷのぼだすこあ部分を貼り付け,<a href="#BR">動作確認済ブラウザ</a><br>
 ぼだ：「個人ランキング獲得ポイント～集計時点のポイント」　まで<br>
 自速:「個人ステータス～集計時点の順位」　まで<br>
 </p>
@@ -452,54 +462,63 @@ for( var i = 0 , l = lf.length; i < l ; i++ ){
 <form name="tt">
 //日付時刻表記<br>
 <select name="time">
-<option selected="selected" value="">YYYY/MM/DD HH:mm</option>
-<option value="">YYYY-MM-DD HH:mm</option>
-<option value="">YYYY年MM月DD日 HH時mm分</option>
-<option value="">YYYY/DD/MM HH:mm</option>
-<option value="">YYYY-DD-MM HH:mm</option>
-<option value="">YY/MM/DD HH:mm</option>
-<option value="">YY-MM-DD HH:mm</option>
-<option value="">Ｈ/MM/DD HH:mm</option>
-<option value="">Ｈ-MM-DD HH:mm</option>
-<option value="">YY/DD/MM HH:mm</option>
-<option value="">YY-DD-MM HH:mm</option>
-<option value="">Ｈ/DD/MM HH:mm</option>
-<option value="">Ｈ-DD-MM HH:mm</option>
-<option value="">YY年MM月DD日 HH時mm分</option>
-<option value="">[H]Ｈ年MM月DD日 HH時mm分</option>
-<option value="">平成Ｈ年MM月DD日 HH時mm分</option>
-<option value="">MM/DD/YYYY HH:mm</option>
-<option value="">MM-DD-YYYY HH:mm</option>
-<option value="">DD/MM/YYYY HH:mm</option>
-<option value="">DD-MM-YYYY HH:mm</option>
-<option value="">MM/DD/YY HH:mm</option>
-<option value="">MM-DD-YY HH:mm</option>
-<option value="">MM/DD/Ｈ HH:mm</option>
-<option value="">MM-DD-Ｈ HH:mm</option>
-<option value="">DD/MM/YY HH:mm</option>
-<option value="">DD-MM-YY HH:mm</option>
-<option value="">DD/MM/Ｈ HH:mm</option>
-<option value="">DD-MM-Ｈ HH:mm</option>
-<option value="">MM/DD HH:mm</option>
-<option value="">MM-DD HH:mm</option>
-<option value="">MM月DD日 HH時mm分</option>
-<option value="">DD/MM HH:mm</option>
-<option value="">DD-MM HH:mm</option>
-<option value="">HH:mm</option>
+<!-- みります1周年 -->
+<option selected="selected" value="">2014/02/27 17:00</option>
+<option value="">2014-02-27 17:00</option>
+<option value="">2014年02月27日 17時00分</option>
+<option value="">2014/27/02 17:00</option>
+<option value="">2014-27-02 17:00</option>
+<option value="">14/02/27 17:00</option>
+<option value="">14-02-27 17:00</option>
+<option value="">26/02/27 17:00</option>
+<option value="">26-02-27 17:00</option>
+<option value="">H26/02/27 17:00</option>
+<option value="">H26-02-27 17:00</option>
+<option value="">14/27/02 17:00</option>
+<option value="">14-27-02 17:00</option>
+<option value="">26/27/02 17:00</option>
+<option value="">26-27-02 17:00</option>
+<option value="">H26/27/02 17:00</option>
+<option value="">H26-27-02 17:00</option>
+<option value="">14年02月27日 17時00分</option>
+<option value="">H26年02月27日 17時00分</option>
+<option value="">平成26年02月27日 17時00分</option>
+<option value="">02/27/2014 17:00</option>
+<option value="">02-27-2014 17:00</option>
+<option value="">27/02/2014 17:00</option>
+<option value="">27-02-2014 17:00</option>
+<option value="">02/27/14 17:00</option>
+<option value="">02-27-14 17:00</option>
+<option value="">02/27/26 17:00</option>
+<option value="">02-27-26 17:00</option>
+<option value="">02/27/H26 17:00</option>
+<option value="">02-27-H26 17:00</option>
+<option value="">27/02/14 17:00</option>
+<option value="">27-02-14 17:00</option>
+<option value="">27/02/26 17:00</option>
+<option value="">27-02-26 17:00</option>
+<option value="">27/02/H26 17:00</option>
+<option value="">27-02-H26 17:00</option>
+<option value="">02/27 17:00</option>
+<option value="">02-27 17:00</option>
+<option value="">02月27日 17時00分</option>
+<option value="">27/02 17:00</option>
+<option value="">27-02 17:00</option>
+<option value="">17:00</option>
 </select>
 </form>
 <form name="DD">
 //曜日表記<br>
 <select name="dy">
 <option selected="selected" value=""></option>
-<option value="">ddd</option>
-<option value="">dddd</option>
-<option value="">dddJ</option>
-<option value="">(ddd)J</option>
-<option value="">（ddd）J</option>
-<option value="">ddddJ</option>
-<option value="">(dddd)J</option>
-<option value="">（dddd）J</option>
+<option value="">Thu</option>
+<option value="">Thursday</option>
+<option value="">木</option>
+<option value="">(木)</option>
+<option value="">（木）</option>
+<option value="">木曜日</option>
+<option value="">(木曜日)</option>
+<option value="">（木曜日）</option>
 </select>
 </form>
 <form name="trg">
@@ -530,7 +549,7 @@ M$より機械翻訳とはいえ
 。ニュージーランド
 がきになる
  -->
-//タイムゾーン(サマータイム未対応)<br>
+//タイムゾーン<br>
 <select name="owata">
 <option value="">UTC -12:00　国際日付変更線西側</option>
 <option value="">UTC -11:00　ミッドウェー島、サモア</option>
@@ -622,7 +641,15 @@ M$より機械翻訳とはいえ
 <textarea name="c_text" rows="10" cols="200"></textarea>
 </form>
 <p>
-更新履歴<br>
+<a name="BR"><h4>//動作確認済ブラウザ//</h4></a>
+PC:IE11,FIREFOX,CHROME<br>
+iOS:SAFARI<br>
+ANDROID:CHROME,FIREFOX　（※標準ブラウザ他は変換行数制限があるようなので非推奨)<br>
+</p>
+<p>
+<h4>更新履歴</h4>
+2014/04/30<br>
+日付表記を一般表記に変更<br>
 2014/04/27<br>
 HH:mmのときソートが変になっていたので修正<br>
 時差変換を追加(サマータイムは未対応)<br>
@@ -655,10 +682,5 @@ webkit系はフォームが勝手に伸縮できてしまうのでCSSでいじ�
 NETAで作成、C#→JSに移植しただけ<br>
 過去いべでたなら<a href="http://millionlive-border-records.googlecode.com/">SVN</a>に存在<br>
 by(ﾟ∀ﾟ)えれな道場</p>
-
-//動作確認済ブラウザ//<br>
-PC:IE10,FIREFOX,CHROME<br>
-iOS:SAFARI<br>
-ANDROID:CHROME,改行抜け対策済み非推奨(BROWSERetc)<br>
 </body>
 </html>
