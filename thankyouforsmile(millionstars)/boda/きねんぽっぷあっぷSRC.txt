@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<meta name="format-detection" content="telephone=no" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+
+    <link rel="stylesheet" href="http://cdn.bn765.com/4eb/2a496d537c616659bdb2da9cf6b7646ae1758f68b8d92b163c3550a6713789b1?e093877ebf1962e4d668e429304d8cf0" media="screen">
+
+<link rel="apple-touch-icon-precomposed" href="http://cdn.bn765.com/66b/764e6fa42f542a827f9906f3368544af8b0240ab87555553935418bdab94dc5c?ccea7c4d7810724ac3b608ccab5e6802">
+<link rel="shortcut icon" href="http://cdn.bn765.com/a2c/aa5c89f6a409ee3fea6affbdb9218df15c783ce9fa6e3da6ccdcf78f578a0380?3ab584d93f830b73b66f97dd28ba426a">
+<title>ｱｲﾄﾞﾙﾏｽﾀｰ ﾐﾘｵﾝﾗｲﾌﾞ!</title>
+	
+	<script src="http://cdn.bn765.com/402/162a8e87eeeeeb714cef7bc0eabafd0afef91934ff187d01f3ce9eefcee0ffd5?7a2f041ae240f8560cb5c0cc6c28b084"></script>
+	
+	
+	<script type="text/javascript">
+		if (navigator.userAgent.indexOf('iPhone') > 0 || navigator.userAgent.indexOf('iPad') > 0 || navigator.userAgent.indexOf('iPod') > 0 || navigator.userAgent.indexOf('Android') > 0) {
+			window.addEventListener('resize', resizeHtml);
+			resizeHtml();
+		}
+
+		function resizeHtml() {
+			var zoomRatio = window.innerWidth / 320;
+			if (zoomRatio < 1.5) {
+				var html = document.getElementsByTagName('html')[0];
+				html.style.zoom = zoomRatio;
+			}
+		}
+
+		(function($)
+		{
+			var reg = {
+				'device': /Android/,
+				'ua'    : /Chrome\/33/,
+				'vendor': /Mobile Safari/
+			};
+
+			if(reg['device'].test(navigator.userAgent) && reg['ua'].test(navigator.userAgent) && reg['vendor'].test(navigator.userAgent) ) {
+				$('html').addClass('chrome-33');
+			}
+		})(jQuery);
+
+	</script>
+
+	<script type="text/javascript" src="http://cdn.bn765.com/01d/5d237d4cec351dc4fd479ab92721909524f92af3ebd85697c540c49e9d11431a?4fee94eea5c3bd837c4c7c2191813754"></script>
+	<script>
+		imas.SoundVolume.init(
+			{
+				voice: "1",
+				webview_se: "",
+				webview_bgm: "",
+				webview_bgm_volume: ""
+			}
+		);
+	</script>
+	</head>
+<body>
+<div id="gree-app-container"> <!-- #gree-app-container -->
+
+
+
+<div id="wrapper"> <!-- #wrapper -->
+	<div class="main-bg"> <!-- main-bg -->
+					<!-- main-menu -->
+<nav class="main-menu">
+	<ul>
+		<li><a href="http://imas.gree-apps.net/app/index.php/mypage" class="nav-my-page">マイページ</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/eigyo?from=header_menu" class="nav-eigyo">営業</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/lesson" class="nav-lesson">レッスン</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/gasha" class="nav-gasha">ガシャ</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/event" class="nav-event">イベント</a></li>
+		<li id="toggle-btn"><a class="hoverable popup-menu">メニュー</a></li>
+	</ul>
+</nav>
+
+
+<!-- /main-menu -->
+
+	<!-- slide-menu -->
+					<div id="slide-menu">
+															<div class="menu-banner">
+					
+
+	
+	<div class="banner-area">
+					<img src="http://cdn.bn765.com/c01/117ba0f566b7fe6634649a730f7379610a06ee347cce0d7bc7a91b505634862a?1f33efd10cba72ce98c923d4b65d3b25" class="new-banner" >
+		
+					<a href="http://imas.gree-apps.net/app/index.php/banner/pass/id/2788/type/18" ><img src="http://cdn.bn765.com/7d7/1e4492b2f9669b9684258877f3056bbded1b972ab14e52829270d2895a3b9f37a7db57b8a6fcfb8328734aaf08b8473b" width="280" ></a><br>
+						<a href="http://imas.gree-apps.net/app/index.php/banner/pass/id/2788/type/18">
+									ﾒﾀﾞﾙを集めて、思い出完成報酬をGET!
+							</a>
+						</div>
+
+				</div>
+					
+		<div class="menu-area">
+    <ul>
+        <li class="menu-group">
+            <ul id="work-menu-caption" class="menu-caption">
+                <li><a href="http://imas.gree-apps.net/app/index.php/livebattle" id="g-menu-livebattle"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/ranking" id="g-menu-ranking"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/brand_new_stage" id="g-menu-budokan"></a></li>
+            </ul>
+        </li>
+        <li class="menu-group">
+            <ul id="card-menu-caption" class="menu-caption">
+                <li><a href="http://imas.gree-apps.net/app/index.php/deck" id="g-menu-deck"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/cardinventory" id="g-menu-cardinventory"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/album" id="g-menu-album"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/potential_skill" id="g-menu-potential-skill"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/cardholder" id="g-menu-cardfolder"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/wantlist" id="g-menu-wantlist"></a></li>
+            </ul>
+        </li>
+        <li class="menu-group">
+            <ul id="idol-menu-caption" class="menu-caption">
+                <li><a href="http://imas.gree-apps.net/app/index.php/unit" id="g-menu-unit"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/idol" id="g-menu-idol"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/audio_room" id="g-menu-audioroom"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/convention_center" id="g-menu-convention"></a></li>
+                <li><a id="g-menu-shortstory" href="http://imas.gree-apps.net/app/index.php/short_story"></a></li>
+                <li><a id="g-menu-theater" href="http://imas.gree-apps.net/app/index.php/theater"></a></li>
+            </ul>
+        </li>
+        <li class="menu-group">
+            <ul id="item-menu-caption" class="menu-caption">
+                <li><a href="http://imas.gree-apps.net/app/index.php/present" id="g-menu-present"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/shop" id="g-menu-shop"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/item" id="g-menu-item"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/exchange" id="g-menu-exchange"></a></li>
+            </ul>
+        </li>
+        <li class="menu-group">
+            <ul id="friend-menu-caption" class="menu-caption">
+                <li><a href="http://imas.gree-apps.net/app/index.php/friend" id="g-menu-friend"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/mypage/mydata" id="g-menu-mydata"></a></li>
+                                    <li><a href="http://imas.gree-apps.net/app/index.php/invite" id="g-menu-invite"></a></li>
+                                <li><a href="http://imas.gree-apps.net/app/index.php/lounge" id="g-menu-lounge"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/trade" id="g-menu-trade"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/bazaar" id="g-menu-bazaar"></a></li>
+            </ul>
+        </li>
+        <li class="menu-group">
+            <ul id="other-menu-caption" class="menu-caption">
+                <li>
+                                            <a href="http://pf.gree.net/58737" target="_top" id="g-menu-toppage"></a>
+                                    </li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/help" id="g-menu-help"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/title" id="g-menu-title"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/memories" id="g-menu-memories"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/voice_drama/top" id="g-menu-voice"></a></li>
+                <li><a href="http://imas.gree-apps.net/app/index.php/config" id="g-menu-setting"></a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+	</div>
+
+
+	<!-- slide-menu -->
+	<script type="text/javascript">
+		var flag = false;
+		document.getElementById("toggle-btn").addEventListener("click", function () {
+			flag = !flag;
+			if (flag) {
+				document.getElementById("slide-menu").className = "open";
+			} else {
+				document.getElementById("slide-menu").className = "";
+			}
+		});
+	</script>
+
+
+		<div id="dialog" class="dialog">
+	<div class="dialog-window">
+		<div class="dialog-content">
+			<div id="dialog-close" class="dialog-close"><span class="hoverable"><img src="http://cdn.bn765.com/ba2/6db109b62b3d396f43ad973c8879d9cabc5ace08bc22aa5b1c38d79f186d8a82?dfb52be6ab4b4d8891d6115badc1376a">閉じる</span></div>
+			<div id="dialog-placeholder" class="dialog-placeholder"></div>
+		</div>
+	</div>
+</div>
+
+<div id="event-raid-g-idol-selected" class="event-raid-g-idol-selected"></div>
+<div class="main-bg">
+	<div class="heading cap-01">選択中アイドル</div>
+	<div class="event-raid-g-selected-idol">
+		<div class="unit-ani"><div id="unit-select-filter"></div> <ul><li><div class="unit-ani-box unit-ani-left" data-position="left" data-position_id=2></div>
+		<img class="unit-ani-image left" src="http://cdn.bn765.com/b39/4259bfad43803c5e22d73473066068b027b596dd10e0983a1f105b77ebe8cda0eccc1a74df64ded61884ce5524d52f6e?14b46596d7e97df3e8a344193fd733b9" data-id="180150"/></li> </ul> <img class="unit-ani-bg" src="http://cdn.bn765.com/de0/34ce5b3f5ca47a64fa042912b2cbca37fbeb88ecd41b4909fa68da64dfabd32a?45ce7efd4353f736f3a40d9ced0b68d8" /> </div> 
+		<div class="event-raid-g-selected-info-border">
+			<p class="txt-left">上位報酬カード&nbsp;獲得可能順位</p>
+			<p class="txt-right"><span class="txt-sub2 font-large">3</span>位まで</p>
+			<p class="txt-left"><span class="txt-sub2">3</span>位の島原エレナpt</p>
+			<p class="txt-right">
+									89,307&nbsp;pt
+							</p>
+		</div>
+		<div class="event-raid-g-selected-info-user">
+			<dl>
+				<dt class="txt-sub2">現在の順位</dt>
+									<dd>129位</dd>
+								<dt class="txt-sub2">島原エレナpt</dt>
+				<dd>100 pt</dd>
+			</dl>
+		</div>
+
+					<div class="event-raid-g-selected-info-time">
+				<p class="font-mini">※3/17(金) 12:38&nbsp;集計時点</p>
+			</div>
+			</div>
+
+			<div class="heading cap-02">ptを獲得したアイドル一覧</div>
+		<ul class="img-horizontal pt pb txt-left">
+							<li class="s-ml s-mb" data-idol-id="18"><img src="http://cdn.bn765.com/6ef/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c80d5b4565a8795b2e301f9568beb7a0853680ae7e6eb2d0a220830e4750b7746?6f9ffb4929e9eda15dc3aafb77d08cb6" width="59" height="59"></li>
+					</ul>
+	
+	<div class="heading cap-02">アイドル一覧</div>
+	<ul id="in-page-tab" class="tab-flex tab-attribute s-pl">
+		<li class="tab-item tab-attribute-all is-active" data-show="tab-0"></li>
+		<li class="tab-item tab-attribute-vocal" data-show="tab-1"></li>
+		<li class="tab-item tab-attribute-dance" data-show="tab-2"></li>
+		<li class="tab-item tab-attribute-visual" data-show="tab-3"></li>
+		<li class="tab-attribute-ex-disable"></li>
+	</ul>
+
+						<div id="tab-0" class="tab-view">
+			<ul class="img-horizontal pt pb txt-left">
+														<li class="s-ml s-mb" data-idol-id="14"><img src="http://cdn.bn765.com/d89/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c790d1863c5b3b6da79003339b5fcee91db20860870ce4ad09b4cbfd39f8bdcac?98912103ba17699016bea44a48dd85b7" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="15"><img src="http://cdn.bn765.com/71a/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cc34b06ea509f5ff68fb4805e4acb5cb5658009ac6d59a71b97de87beef49209d?33001468fb999a882421b8f4f5f4b184" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="16"><img src="http://cdn.bn765.com/99f/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c3fcf1069cbec925f5ef283b53c9c038a58584624ba8f35479a3ea46949b4e41b?29dae3d98a4d5730e11c9e5f2c481147" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="17"><img src="http://cdn.bn765.com/a04/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c9805f3413e848a79b3cf45cfce3939f73528bb0c523eaf1c69250ac93e994638?272b6f0f5a03983b583fdde9f4513e31" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="18"><img src="http://cdn.bn765.com/6ef/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c80d5b4565a8795b2e301f9568beb7a0853680ae7e6eb2d0a220830e4750b7746?6f9ffb4929e9eda15dc3aafb77d08cb6" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="19"><img src="http://cdn.bn765.com/945/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c13a9ed8b0fa0865a265e6d380ccdb0e92bcb2c9b0470a1a5a986eb15aae9a419?ccaf815ae9c634703dba8608626862f4" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="20"><img src="http://cdn.bn765.com/6fb/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ccd253f4424e8bd0a36463f9ee61fea0abff1e39d6fc51440ff8f6895f151833e?360c1118b42d26c7d56565ba72ffb6f9" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="21"><img src="http://cdn.bn765.com/368/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ce4d87eefe3068a21e9faaa6b9b58fb1c06abe09caf6c280da5329a742a6e6aae?45d09094a6098956895f976ae97b05b2" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="22"><img src="http://cdn.bn765.com/8fa/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c123bd03debf638d34fad7023fb8f63d0d9161dbc5aa31de7c2cfc4a71abaf617?9ab9599032e7d94e289f20975ec39c13" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="23"><img src="http://cdn.bn765.com/d14/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c719cab4948b034bb352321bb02b3ef34d4a6e8e00aa905ace7399522b203f3a9?d03313a9f560b3d2e3018d35d5a0007d" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="24"><img src="http://cdn.bn765.com/e3f/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ce495fb87f76f46e5ac1008866dfc7316b2c17c931a87dbbaa96bdf0d2ef99e5a?642cf21d808e33ad2bdc15e5dd7e40be" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="25"><img src="http://cdn.bn765.com/01a/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cd9eb107ac27d0efb267d8e9c4f6895a59cc5d7e4846902aebe04ff33408d0572?692172c3cece33f19ba6023bc4356e6b" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="26"><img src="http://cdn.bn765.com/45b/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cb26cbf1bc2b5fdbaf385a17089efba6d52e2ff66410f0d756431424e37295937?060c05b521632cc8d5748a2b70e0ddd3" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="27"><img src="http://cdn.bn765.com/238/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cf9ca12b871a231620a360cfe8f87bd98f6f89756b6d9e19857bb2c42fb6f559b?44c18f91e37a3295281e45dc42320a45" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="28"><img src="http://cdn.bn765.com/20c/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c882ca6ff69a83e072f74f9add104ba2b559775396fa9945f9e3ebe806c0ca4ea?254f2b11a8e15c70e1ef3b3b78c4caed" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="29"><img src="http://cdn.bn765.com/6e5/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cbd82043c56c6a5d78d38ccd97b56d490811239478edf0dbd6c7a7050f5c62326?a81e393ba6fef5b480759b14bad5721f" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="30"><img src="http://cdn.bn765.com/6ed/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cdaac149160d3d8cc0634189c85350459421c6219c14db99cf86fb9de92c55e78?ce1a107d8072c778776e69ebb072e367" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="31"><img src="http://cdn.bn765.com/97c/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c388cc52329136e106d6b8270e2bfe0ce36060ad09078f51921b874f81f2a7bd0?3b6ddb867a1381ddc25bf95c410a866f" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="32"><img src="http://cdn.bn765.com/aee/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c2f06c6d36cfd9210ebdc38340c078d9e00e7be41d1c556c1d5f6e5576a9c17b9?40f0d41fc39cd31043ce4b5420ff9e63" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="33"><img src="http://cdn.bn765.com/7f9/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cb9130dbb644893ca1691f541aafbb8d7cfe4cfdefc7aaea8cab7dd73c6d93e2e?a5f1218dd778f014993ae832dfd9e255" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="34"><img src="http://cdn.bn765.com/5a4/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cde78140afb16f726c26c0269baf053cab4bc6bf9924b3aab328a6478260a86ac?c43adcd15b97275b05035694299aa08a" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="35"><img src="http://cdn.bn765.com/f5a/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cbe4ab84fd135f14ac2dbe1c9f3a311e7ed47dedc8ebd688ed00e275a24a22206?013e398fb9966ddbdcf31c62bafd0bcc" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="36"><img src="http://cdn.bn765.com/bf7/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c377e1c28b27ade2d80c6a5aa061c037f4eae9a528767550a4c8cecb99658dc41?cf93f01e02ee328e706f137e7c145421" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="37"><img src="http://cdn.bn765.com/e29/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c6fed46750df394697434faadf7f476c200c0119b523d6d75af267e3ceda3b82e?1d3f248fa837eddb9f59994a2caa02f5" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="38"><img src="http://cdn.bn765.com/407/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c72ebb0c2febcbc38d5c389229fe095674186a75d3d6a3b7907b46d0d9b4ab632?3d9d24f0dce3a36a14bc39f4ef8db83c" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="39"><img src="http://cdn.bn765.com/1d0/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c68abdaa5785dd1dce77536ee8ff0de445beed76a55d14204818fa92c8dd3537e?bf3f73d89f3573563ef64965f22a3537" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="40"><img src="http://cdn.bn765.com/388/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c9ce162adca79a04cc5d1c7bf7db53bea619f78ca32d6c6c9263ec7acb0b376d3?8d7585da0af899061d1e99fbc71340b9" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="41"><img src="http://cdn.bn765.com/821/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c1546a7c72fec8e787814909529bd3e0276f13eb088c297c1ad17debac51c4520?1d4eac4e04564d0ee2a94e40c69bbd1b" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="42"><img src="http://cdn.bn765.com/01e/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ce0984c358c095d21dd343f89951c92634de993bd6ea8f8cf019a60dd942bd24b?9e853afdcdaabb3ff959e3a76d9539af" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="43"><img src="http://cdn.bn765.com/de9/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c96fce1347875fe371d2cae9e4ca61d5ed6ea5ce0ebd2e5a3de1836e01c864bfc?e75b5b3089a74159f6b7438b3c75c4eb" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="44"><img src="http://cdn.bn765.com/336/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c50218df0e87ea6629e25f93f372e02fdd4e670c8f1ece9691b1a3b9554d8725d?6e8d2d63d03383049a23fd20a223596d" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="45"><img src="http://cdn.bn765.com/00f/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ceba0bd218b017bc3cb211e43698861a4cf978fef1306c1a272b46753e687f503?f2152c14f5a8cedd69d3fc354c17d18a" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="46"><img src="http://cdn.bn765.com/e89/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c669e6113da894dd8f4394c612ad3b7d8920ac3908e4155d91ea5a885671db98b?667fca01ed1a829f04ea4bff01aa4cfa" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="47"><img src="http://cdn.bn765.com/c5d/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cb2ff1b7b25709be6f4ae92e31e9c65dbd2d59408234bb11e8a408aaeb8e17d59?35222179859b9d64189e218c84b62bb5" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="48"><img src="http://cdn.bn765.com/db8/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c0fb676cbcda713251471975c557f3d1561d0064a22aedebbb90cae4a996c6005?9282f601c7cf7d1a01253c0a147f7143" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="49"><img src="http://cdn.bn765.com/183/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c3160d0b3e6de4b18d5394c488df038bfa6a49463d9dfced06d9f5fd9f05fb6ac?2d9bc3e85a3ec5a1b1f56eb04e5612a2" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="50"><img src="http://cdn.bn765.com/8b3/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c7a1e62b980c76bdcc90a288e415382719723be3af2fe83006057502ac685600b?3e216e2220457db89dae0f362b4e51b7" width="59" height="59"></li>
+							</ul>
+		</div>
+					<div id="tab-1" class="tab-view">
+			<ul class="img-horizontal pt pb txt-left">
+														<li class="s-ml s-mb" data-idol-id="14"><img src="http://cdn.bn765.com/d89/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c790d1863c5b3b6da79003339b5fcee91db20860870ce4ad09b4cbfd39f8bdcac?98912103ba17699016bea44a48dd85b7" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="15"><img src="http://cdn.bn765.com/71a/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cc34b06ea509f5ff68fb4805e4acb5cb5658009ac6d59a71b97de87beef49209d?33001468fb999a882421b8f4f5f4b184" width="59" height="59"></li>
+																			<li class="s-ml s-mb" data-idol-id="17"><img src="http://cdn.bn765.com/a04/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c9805f3413e848a79b3cf45cfce3939f73528bb0c523eaf1c69250ac93e994638?272b6f0f5a03983b583fdde9f4513e31" width="59" height="59"></li>
+																																		<li class="s-ml s-mb" data-idol-id="22"><img src="http://cdn.bn765.com/8fa/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c123bd03debf638d34fad7023fb8f63d0d9161dbc5aa31de7c2cfc4a71abaf617?9ab9599032e7d94e289f20975ec39c13" width="59" height="59"></li>
+																			<li class="s-ml s-mb" data-idol-id="24"><img src="http://cdn.bn765.com/e3f/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ce495fb87f76f46e5ac1008866dfc7316b2c17c931a87dbbaa96bdf0d2ef99e5a?642cf21d808e33ad2bdc15e5dd7e40be" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="27"><img src="http://cdn.bn765.com/238/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cf9ca12b871a231620a360cfe8f87bd98f6f89756b6d9e19857bb2c42fb6f559b?44c18f91e37a3295281e45dc42320a45" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="28"><img src="http://cdn.bn765.com/20c/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c882ca6ff69a83e072f74f9add104ba2b559775396fa9945f9e3ebe806c0ca4ea?254f2b11a8e15c70e1ef3b3b78c4caed" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="31"><img src="http://cdn.bn765.com/97c/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c388cc52329136e106d6b8270e2bfe0ce36060ad09078f51921b874f81f2a7bd0?3b6ddb867a1381ddc25bf95c410a866f" width="59" height="59"></li>
+																													<li class="s-ml s-mb" data-idol-id="35"><img src="http://cdn.bn765.com/f5a/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cbe4ab84fd135f14ac2dbe1c9f3a311e7ed47dedc8ebd688ed00e275a24a22206?013e398fb9966ddbdcf31c62bafd0bcc" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="36"><img src="http://cdn.bn765.com/bf7/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c377e1c28b27ade2d80c6a5aa061c037f4eae9a528767550a4c8cecb99658dc41?cf93f01e02ee328e706f137e7c145421" width="59" height="59"></li>
+																																																																															<li class="s-ml s-mb" data-idol-id="50"><img src="http://cdn.bn765.com/8b3/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c7a1e62b980c76bdcc90a288e415382719723be3af2fe83006057502ac685600b?3e216e2220457db89dae0f362b4e51b7" width="59" height="59"></li>
+							</ul>
+		</div>
+					<div id="tab-2" class="tab-view">
+			<ul class="img-horizontal pt pb txt-left">
+																																		<li class="s-ml s-mb" data-idol-id="18"><img src="http://cdn.bn765.com/6ef/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c80d5b4565a8795b2e301f9568beb7a0853680ae7e6eb2d0a220830e4750b7746?6f9ffb4929e9eda15dc3aafb77d08cb6" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="19"><img src="http://cdn.bn765.com/945/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c13a9ed8b0fa0865a265e6d380ccdb0e92bcb2c9b0470a1a5a986eb15aae9a419?ccaf815ae9c634703dba8608626862f4" width="59" height="59"></li>
+																													<li class="s-ml s-mb" data-idol-id="23"><img src="http://cdn.bn765.com/d14/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c719cab4948b034bb352321bb02b3ef34d4a6e8e00aa905ace7399522b203f3a9?d03313a9f560b3d2e3018d35d5a0007d" width="59" height="59"></li>
+																																							<li class="s-ml s-mb" data-idol-id="29"><img src="http://cdn.bn765.com/6e5/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cbd82043c56c6a5d78d38ccd97b56d490811239478edf0dbd6c7a7050f5c62326?a81e393ba6fef5b480759b14bad5721f" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="32"><img src="http://cdn.bn765.com/aee/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c2f06c6d36cfd9210ebdc38340c078d9e00e7be41d1c556c1d5f6e5576a9c17b9?40f0d41fc39cd31043ce4b5420ff9e63" width="59" height="59"></li>
+																			<li class="s-ml s-mb" data-idol-id="34"><img src="http://cdn.bn765.com/5a4/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cde78140afb16f726c26c0269baf053cab4bc6bf9924b3aab328a6478260a86ac?c43adcd15b97275b05035694299aa08a" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="37"><img src="http://cdn.bn765.com/e29/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c6fed46750df394697434faadf7f476c200c0119b523d6d75af267e3ceda3b82e?1d3f248fa837eddb9f59994a2caa02f5" width="59" height="59"></li>
+																			<li class="s-ml s-mb" data-idol-id="39"><img src="http://cdn.bn765.com/1d0/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c68abdaa5785dd1dce77536ee8ff0de445beed76a55d14204818fa92c8dd3537e?bf3f73d89f3573563ef64965f22a3537" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="40"><img src="http://cdn.bn765.com/388/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c9ce162adca79a04cc5d1c7bf7db53bea619f78ca32d6c6c9263ec7acb0b376d3?8d7585da0af899061d1e99fbc71340b9" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="43"><img src="http://cdn.bn765.com/de9/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c96fce1347875fe371d2cae9e4ca61d5ed6ea5ce0ebd2e5a3de1836e01c864bfc?e75b5b3089a74159f6b7438b3c75c4eb" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="44"><img src="http://cdn.bn765.com/336/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c50218df0e87ea6629e25f93f372e02fdd4e670c8f1ece9691b1a3b9554d8725d?6e8d2d63d03383049a23fd20a223596d" width="59" height="59"></li>
+																			<li class="s-ml s-mb" data-idol-id="46"><img src="http://cdn.bn765.com/e89/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c669e6113da894dd8f4394c612ad3b7d8920ac3908e4155d91ea5a885671db98b?667fca01ed1a829f04ea4bff01aa4cfa" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="47"><img src="http://cdn.bn765.com/c5d/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cb2ff1b7b25709be6f4ae92e31e9c65dbd2d59408234bb11e8a408aaeb8e17d59?35222179859b9d64189e218c84b62bb5" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="48"><img src="http://cdn.bn765.com/db8/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c0fb676cbcda713251471975c557f3d1561d0064a22aedebbb90cae4a996c6005?9282f601c7cf7d1a01253c0a147f7143" width="59" height="59"></li>
+																	</ul>
+		</div>
+					<div id="tab-3" class="tab-view">
+			<ul class="img-horizontal pt pb txt-left">
+																								<li class="s-ml s-mb" data-idol-id="16"><img src="http://cdn.bn765.com/99f/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c3fcf1069cbec925f5ef283b53c9c038a58584624ba8f35479a3ea46949b4e41b?29dae3d98a4d5730e11c9e5f2c481147" width="59" height="59"></li>
+																													<li class="s-ml s-mb" data-idol-id="20"><img src="http://cdn.bn765.com/6fb/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ccd253f4424e8bd0a36463f9ee61fea0abff1e39d6fc51440ff8f6895f151833e?360c1118b42d26c7d56565ba72ffb6f9" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="21"><img src="http://cdn.bn765.com/368/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ce4d87eefe3068a21e9faaa6b9b58fb1c06abe09caf6c280da5329a742a6e6aae?45d09094a6098956895f976ae97b05b2" width="59" height="59"></li>
+																													<li class="s-ml s-mb" data-idol-id="25"><img src="http://cdn.bn765.com/01a/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cd9eb107ac27d0efb267d8e9c4f6895a59cc5d7e4846902aebe04ff33408d0572?692172c3cece33f19ba6023bc4356e6b" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="26"><img src="http://cdn.bn765.com/45b/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cb26cbf1bc2b5fdbaf385a17089efba6d52e2ff66410f0d756431424e37295937?060c05b521632cc8d5748a2b70e0ddd3" width="59" height="59"></li>
+																													<li class="s-ml s-mb" data-idol-id="30"><img src="http://cdn.bn765.com/6ed/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cdaac149160d3d8cc0634189c85350459421c6219c14db99cf86fb9de92c55e78?ce1a107d8072c778776e69ebb072e367" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="33"><img src="http://cdn.bn765.com/7f9/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82cb9130dbb644893ca1691f541aafbb8d7cfe4cfdefc7aaea8cab7dd73c6d93e2e?a5f1218dd778f014993ae832dfd9e255" width="59" height="59"></li>
+																																		<li class="s-ml s-mb" data-idol-id="38"><img src="http://cdn.bn765.com/407/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c72ebb0c2febcbc38d5c389229fe095674186a75d3d6a3b7907b46d0d9b4ab632?3d9d24f0dce3a36a14bc39f4ef8db83c" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="41"><img src="http://cdn.bn765.com/821/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c1546a7c72fec8e787814909529bd3e0276f13eb088c297c1ad17debac51c4520?1d4eac4e04564d0ee2a94e40c69bbd1b" width="59" height="59"></li>
+														<li class="s-ml s-mb" data-idol-id="42"><img src="http://cdn.bn765.com/01e/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ce0984c358c095d21dd343f89951c92634de993bd6ea8f8cf019a60dd942bd24b?9e853afdcdaabb3ff959e3a76d9539af" width="59" height="59"></li>
+																								<li class="s-ml s-mb" data-idol-id="45"><img src="http://cdn.bn765.com/00f/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82ceba0bd218b017bc3cb211e43698861a4cf978fef1306c1a272b46753e687f503?f2152c14f5a8cedd69d3fc354c17d18a" width="59" height="59"></li>
+																													<li class="s-ml s-mb" data-idol-id="49"><img src="http://cdn.bn765.com/183/f33145ad9b53289e728214f2eea356728611e7b43f29776e72fdc72b64bdc82c3160d0b3e6de4b18d5394c488df038bfa6a49463d9dfced06d9f5fd9f05fb6ac?2d9bc3e85a3ec5a1b1f56eb04e5612a2" width="59" height="59"></li>
+												</ul>
+		</div>
+			</div>
+<div class="line-s1"></div>
+
+
+		<div class="left-arrow">
+			<a href="http://imas.gree-apps.net/app/index.php/event">イベントTOPへ</a>
+		</div>
+
+<script src="http://cdn.bn765.com/64f/21bee41f9ae3e6f120eb391687a555d3926a6ea4bda1c18de5243577e03c9ce9?6dc59d3a72ad547168cf823c2fddc728"></script>
+
+<script type="text/html" id="tmpl-event-idol-info">
+	<p class="event-raid-g idol-name bg-idol-<%- idolId %>"><%- idolName %></p>
+	<div class="event-raid-g-idol-info">
+		<div class="event-idol-img mr"><img src="<%- faceIcon %>" width="76" height="76"></div>
+		<div class="event-raid-g-dialog-info">
+			<% /* 変更する上では不要かも %>			<p class="txt-left">上位報酬カード&nbsp;獲得可能順位</p>
+			<p class="txt-right"><span class="txt-sub2 font-large"><%- getRewardRank %></span>位まで</p>
+			<% */ %>			<dl class="dl-horizontal">
+				<dt><span class="txt-sub2"><%- getRewardRank %></span>位の<%- idolName %>pt</dt>
+				<dd><%- getRewardPoint %></dd>
+			</dl>
+			<dl class="dl-horizontal">
+				<dt class="txt-sub2">現在の順位</dt>
+				<dd><%- myRank %></dd>
+				<dt class="txt-sub2"><%- idolName %>pt</dt>
+				<dd><%- myPoint %>pt</dd>
+			</dl>
+			<% if(!_.isNull(rankingTime)) { %>				<p class="font-small mt txt-left">※<%= rankingTime %>&nbsp;集計時点</p>
+			<% } %>		</div>
+	</div>
+	<p class="card-txtbox" style="width: 95%;"><%= text %></p>
+	<form method="post" action="http://imas.gree-apps.net/app/index.php/event/350/raid/selectEventIdol" id="set-idol">
+		<input type="hidden" value="0" name="rareFlag">
+		<input type="hidden" value="<%- idolId %>" name="idol_id">
+		<input name="_csrf_token" type="hidden" value="412702681364ff60b413c02704ef584e59302ece09d748ebd81c88d9fcbae04d">
+		<button type="submit" class="base-btn js-invalid-double-click"><%- idolName %> を選択する</button>
+	</form>
+</script>
+<script>
+	(function(){
+		var ajaxSending = false,
+			url = "http://imas.gree-apps.net/app/index.php/event/350/raid/getEventIdolForAjax",
+			$elemSelectedIdol = $('#event-raid-g-selected-idol'),
+			eventIdolInfo = _.template($('#tmpl-event-idol-info').text()),
+			loaderImg = "http://cdn.bn765.com/24b/796e725dea7fa398a87c6aa1246cba93c30ab582d68b9c5869abdd4c08ccc54c?5935b0606dd7c850ce1a2c8808fa5571";
+
+		var eventIdol = {
+			viewTemplate: function(elem, data) {
+				$('.dialog-placeholder').html(elem(data));
+			},
+
+			request: function(data) {
+				//Ajaxリクエストの処理
+
+				if(ajaxSending) {
+					return false;
+				}
+
+				ajaxSending = $.ajax({
+					'url': url,
+					'data': data,
+					'dataType': 'json',
+					success: function(json) {
+						//成功した時の処理 データのバインドを書くことになります
+						eventIdol.viewTemplate(eventIdolInfo, json);
+					},
+					error: function(xhr) {
+						//失敗した時の処理 エラーが出た旨をユーザーに伝える処理を書きます
+					},
+					complete: function() {
+						ajaxSending = false;
+					}
+				});
+			}
+		};
+
+		//ここからクリックした時の処理を書く
+		$('.img-horizontal li').on('click', function(){
+			var idolId = $(this).data('idol-id');
+			eventIdol.request({ 'idol_id':idolId });
+			$('.dialog-placeholder').html('<div id="theater-loading" class="theater-loading"><img src="' + loaderImg + '"></div>');
+			$('#dialog').addClass('is-show');
+			$('body').addClass('dialog-open').append('<div class="overlay overlay-black"></div>');
+		});
+
+		 $('.dialog-close').on('click', function(){
+			$('#dialog').removeClass('is-show');
+			$('body').removeClass('dialog-open');
+			$('.overlay').remove();
+		});
+
+		$(document).on('submit', '#set-idol', function(){
+			$('.js-invalid-double-click').removeClass('base-btn').addClass('base-btn-off').prop('disabled', 'disabled');
+		});
+
+	})();
+
+</script>
+
+
+
+    
+<a href="#wrapper" class="js-mv-id mv-id mt"><img src="http://cdn.bn765.com/a2c/e4f71985efb653fb760fd54e204afe2513e36a37352693c1bfd329c22f494638?4a6ac627a31c9de73272056afb7dd3fc" width="320" height="43" alt="ページTOPへ"></a>
+
+<!-- main-menu -->
+<nav class="main-menu">
+	<ul>
+		<li><a href="http://imas.gree-apps.net/app/index.php/mypage" class="nav-my-page">マイページ</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/eigyo" class="nav-eigyo">営業</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/lesson" class="nav-lesson">レッスン</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/gasha" class="nav-gasha">ガシャ</a></li>
+		<li><a href="http://imas.gree-apps.net/app/index.php/event" class="nav-event">イベント</a></li>
+					<li><a href="http://pf.gree.net/58737" target="_top" class="nav-top"></a></li>
+			</ul>
+</nav>
+<!-- /main-menu -->
+
+
+<!-- footer -->
+<footer>
+	<p><small>©窪岡俊之 ©2013 BANDAI NAMCO Entertainment Inc.<br>©BNEI／PROJECT iM@S</small></p>
+</footer>
+<!-- /footer -->
+
+<!-- debug -->
+<!-- /debug -->
+
+
+</div> <!-- /main-bg -->
+<div class="multi-column-overlay multi-column-overlay-black"></div>
+</div> <!-- /#wrapper -->
+
+
+</div> <!-- /#gree-app-container -->
+
+
+<script type="text/javascript" src="http://cdn.bn765.com/c6c/c97d5d8391318e2729c2feb6e8f9b82d?e6041648cfe97508d1f176d9653edeba"></script>
+
+			<script type="text/javascript" src="http://aimg-pf.gree.net/js/ggp/gree.min.js?2017031712"></script>
+	<script type="text/javascript">
+	GREE.init({
+		app_id: '58737',
+				enableHeader: true,
+				enableFooter: true			});
+	$(document).ready(function(){
+		if (window.pageYOffset === 0) {
+			window.scrollTo(0, 1);
+		}
+	});
+</script>
+
+
+
+
+
+<script type="text/javascript" src="http://cdn.bn765.com/6d8/d1427b19f571e9c72220cd7119eb8e2a496375fe86925598d2ddeb72176b4215?51b2b4e23698873c37ead13442f8bccd"></script>
+
+	<script type="text/javascript" src="http://cdn.bn765.com/8c8/948e4002ccee81b7852f51249c76dce93e8433f311d1322a8d7e1c32013bc36f?6e9d3b0da74f2a4a7042b494cdaa7c2e"></script>
+	<script type="text/javascript">
+		if ('addEventListener' in document) {
+			document.addEventListener('DOMContentLoaded', function() {
+				FastClick.attach(document.body);
+			}, false);
+		}
+	</script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+	
+	var formInputClicked = false;
+	var onClickFormInput = function(){
+		//1クリック目
+		if(formInputClicked==false){
+			formInputClicked = true;
+		}
+		else{
+			$('form input[type=submit]').attr("disabled", "disabled");
+		}
+	};
+
+	</script>
+
+
+
+</body>
+</html>
