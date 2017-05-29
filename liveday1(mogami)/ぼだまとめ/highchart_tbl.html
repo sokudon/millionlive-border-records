@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+<!--<link href="./dt_json/tbl1.css" type="text/css" rel="stylesheet">-->
+<link href="./dt_json/tbl.css" type="text/css" rel="stylesheet">
+<style type="text/css">
+${demo.css}
+</style>
+<script type="text/javascript" src="./dt_json/jquery.min.js"></script>
+<script  src="./dt_json/bd_high_base.js"></script>
+<script  src="./dt_json/bd_high.js"></script>
+<script  src="./dt_json/_highchart_real.js"></script>
+<script  src="./dt_json/high_title.js"></script>
+<script  src="./dt_json/exporting.js"></script>
+<script src="./dt_json/highcharts.js"></script>
+<script src="./dt_json/exporting.js"></script>
+<script type="text/javascript">
+<!--
+var border=[];
+for(var i=0;i<base.length;i++){
+border[i]=new Array();
+border[i]['name'] = base[i]['name'];
+border[i]["data"] = base[i]['data'].concat(real[i]['data']);
+}
+
+var border_data=border;
+$(function () {
+	table_enable=1;//2でぼだだけ
+	rdtbl();
+});
+-->
+</script>
+</head>
+<body>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="tbl"></div>
+<button id="100" class="autocompare">100のみ</button>
+<button id="500" class="autocompare">500のみ</button>
+<button id="1200" class="autocompare">1200のみ</button>
+<button id="all" class="autocompare">すべて</button>
+<button id="gettbl">表</button>
+<button id="gettbl2">表(+速度)</button>
+<form name="TZ">
+時間:
+<select name="HM" onChange="rdtbl()">>
+<!--<option value="">(※制限なし)?[0-9]</option>-->
+<option value="">(※5分毎)?[0-9]{1,2}:[0-9][05]</option>
+<option value="">(※10分毎)?[0-9]{1,2}:[0-9]0</option>
+<option value="">(※20分毎)?[0-9]{1,2}:[024]0</option>
+<option value="">(※30分毎)?[0-9]{1,2}:[03]0</option>
+<option selected="selected" value="">(※毎時)?[0-9]{1,2}:00</option>
+<option value="">(※日次,17時起点)?17:00</option>
+<option value="">(※日次,0時起点)?0:00</option>
+<option value="">-------------------------</option>
+<option value="">(※日次,1時起点)?1:00</option>
+<option value="">(※日次,2時起点)?2:00</option>
+<option value="">(※日次,3時起点)?3:00</option>
+<option value="">(※日次,4時起点)?4:00</option>
+<option value="">(※日次,5時起点)?5:00</option>
+<option value="">(※日次,6時起点)?6:00</option>
+<option value="">(※日次,7時起点)?7:00</option>
+<option value="">(※日次,8時起点)?8:00</option>
+<option value="">(※日次,9時起点)?9:00</option>
+<option value="">(※日次,10時起点)?10:00</option>
+<option value="">(※日次,11時起点)?11:00</option>
+<option value="">-------------------------</option>
+<option value="">(※日次,12時起点)?12:00</option>
+<option value="">(※日次,13時起点)?13:00</option>
+<option value="">(※日次,14時起点)?14:00</option>
+<option value="">(※日次,15時起点)?15:00</option>
+<option value="">(※日次,16時起点)?16:00</option>
+<option value="">-------------------------</option>
+<option value="">(※日次,18時起点)?18:00</option>
+<option value="">(※日次,19時起点)?19:00</option>
+<option value="">(※日次,20時起点)?20:00</option>
+<option value="">(※日次,21時起点)?21:00</option>
+<option value="">(※日次,22時起点)?22:00</option>
+<option value="">(※日次,23時起点)?23:00</option>
+</select>
+</form>
+<form name="NZ">
+表示件数: 最新
+<select name="NM" onChange="rdtbl()">
+<option value="">1</option>
+<option selected="selected" value="">3</option>
+<option value="">5</option>
+<option value="">10</option>
+<option value="">20</option>
+<option value="">30</option>
+<option value="">40</option>
+<option value="">50</option>
+<option value="">100</option>
+<option value="">200</option>
+<option value="">300</option>
+<option value="">400</option>
+<option value="">500</option>
+</select>
+件まで<br>
+<label for="OFF"><input type="checkbox" value="NEW" id="OFF" onChange="rdtbl()">時刻正規オフセット+1<br></label>
+<label for="SHOJUN"><input type="checkbox" value="" id="SHOJUN" onChange="rdtbl()">てーぶる描写（古い順;2016/1/1→2016/1/2）<br></label>
+</form>

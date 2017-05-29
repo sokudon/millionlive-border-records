@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+<!--<link href="./dt_json/tbl1.css" type="text/css" rel="stylesheet">-->
+<link href="./dt_json/tbl.css" type="text/css" rel="stylesheet">
+<style type="text/css">
+${demo.css}
+</style>
+<script type="text/javascript" src="./dt_json/jquery.min.js"></script>
+<script  src="./RANK/bd_high_base.txt"></script>
+<script src="./dt_json/highcharts.js"></script>
+<script  src="./dt_json/_highchart_rank.js"></script>
+<script  src="./dt_json/high_title.js"></script>
+<script  src="./dt_json/exporting.js"></script>
+<script type="text/javascript">
+<!--
+var border_data=base;
+
+$(function () {
+	table_enable=1;//2でぼだだけ
+	rdtbl();
+});
+-->
+</script>
+</head>
+<body>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<button id="gettbl">表</button>
+<button id="gettbl2">表(+差)</button><div id="tbl"></div>
+<form name="NZ">
+表示件数: 最新
+<select name="NM" onChange="rdtbl()">
+<option value="">1</option>
+<option value="">3</option>
+<option value="">5</option>
+<option value="">10</option>
+<option selected="selected" value="">20</option>
+<option value="">30</option>
+<option value="">40</option>
+<option value="">50</option>
+<option value="">100</option>
+<option value="">200</option>
+<option value="">300</option>
+<option value="">400</option>
+<option value="">500</option>
+</select>
+件まで<br>
+<label for="SHOJUN"><input type="checkbox" checked="checked" value="" id="SHOJUN" onChange="rdtbl()">てーぶる描写（古い順;2016/1/1→2016/1/2）<br></label>
+</form>

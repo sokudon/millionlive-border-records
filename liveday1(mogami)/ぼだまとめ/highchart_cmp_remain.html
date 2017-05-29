@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example Compare</title>
+
+		<script type="text/javascript" src="./dt_json/jquery.min.js"></script>
+		<script type="text/javascript" src="./dt_json/bd_high_real.js"></script>
+		<script type="text/javascript" src="./dt_json/bd_high_cmp.js"></script>
+		<script type="text/javascript" src="./dt_json/bd_high_merged.js"></script>
+<script type="text/javascript" src="./dt_json/high_title.js"></script>
+<script src="./dt_json/highchart_cmp_remain2.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<style type="text/css">
+${demo.css}
+		</style>
+		<script type="text/javascript">
+<!--
+var border=[];
+for(var i=0;i<base.length;i++){
+border[i]=new Array();
+border[i]['name'] = base[i]['name'];
+border[i]["data"] = base[i]['data'].concat(real[i]['data']);
+}
+var border_data=border.concat(compare);
+convert_left_time(border_data);
+
+-->
+		</script>
+	</head>
+	<body>
+<div id="container" style="min-width: 310px; height: 600px; margin: 0 auto"></div>
+<button id="100" class="autocompare">100のみ</button>
+<button id="500" class="autocompare">500のみ</button>
+<button id="1200" class="autocompare">1200のみ</button>
+<button id="all" class="autocompare">すべて</button><br>
+<form name="seek" style="display: inline">
+<input type="text" id="seek_n" value="/1?[12]00位/">
+</form>
+<button id="md" class="autocompare">けんさく(/～/でせいきひょうげん)</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--"https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['annotationchart']}]}" -->
+    <script type="text/javascript" src="./dt_json/loader.js"></script>
+    <script type="text/javascript" src="./dt_json/bd_goog_base.js"></script>
+    <script type="text/javascript" src="./dt_json/bd_goog_real.js"></script>
+	<script src="./dt_json/high_title.js"></script>
+    <script type='text/javascript'>
+
+
+      google.charts.load('current', {'packages':['annotationchart']});
+      google.charts.setOnLoadCallback(drawChart);
+		
+      function drawChart() {
+    var data = new google.visualization.DataTable();
+
+	document.getElementById('title').innerHTML= "<h3>"+ibe_title +"</h3>";
+  	var border_merged = border_base.concat(border_data);
+  	
+  	//降順QS
+  	border_merged.sort(
+function(a,b){
+if( a[0] < b[0] ) return 1;
+if( a[0] > b[0] ) return -1;
+return 0;
+});
+  
+  	//MKからむそくどつき
+   	 data.addColumn(column_data[0][0],column_data[0][1]);
+ 	 for (var i = 1; i <column_data.length ; i++) {
+   	 data.addColumn(column_data[i][0],column_data[i][1]);
+   	 data.addColumn(column_data[i][0],"速度");
+  	}
+  	
+  	//時刻正規でふぃるたー
+var tm=document.TZ.HM.options[document.TZ.HM.selectedIndex].text;
+ tm ="^"+tm+"$";
+	var jisoku=[];
+	var sj=[];
+	var ll;
+   for(var i=0,k=0;i<border_merged.length;i++){
+	ll=border_merged[i][0];
+	ll  = ll.getHours()  + ":" + ("0" +ll.getMinutes()).slice(-2);
+   if(ll.match(tm)){
+   sj[k]=i;
+   k++;
+   }}
+   var tmp=0;
+if(sj.length>0){
+   for(var i=0;i<sj.length-1;i++){
+   jisoku[i]= [];
+   jisoku[i][0]=border_merged[sj[i]][0];
+   for(var k=1;k<column_data.length;k++){
+   jisoku[i][2*k-1]=border_merged[sj[i]][k];
+   tmp=border_merged[sj[i]][k]-border_merged[sj[i+1]][k];
+   if(tmp==0){tmp=undefined;}
+   jisoku[i][2*k]=tmp;
+}}
+jisoku[i]=[];
+jisoku[i][0]=border_merged[sj[i]][0];
+for(var k=1;k<column_data.length;k++){
+jisoku[i][2*k-1]=border_merged[sj[i]][k];
+jisoku[i][2*k]=undefined;
+}
+
+}
+   
+  	
+	data.addRows(jisoku);
+        
+        
+	var date_formatter = new google.visualization.DateFormat({pattern: 'yyyy/MM/dd HH:mm'});
+	date_formatter.format(data, 0);
+	
+	var formatter = new google.visualization.NumberFormat({ pattern: '###,###'});
+   //for(var i=1;i<column_data.length ;i++){
+   for(var i=1;i<(column_data.length-1)*2+1 ;i++){
+   formatter.format(data, i);
+   }
+   
+
+	 var table = new google.visualization.Table(document.getElementById('table_div'));
+	 var t_options = {
+	//showRowNumber: true,
+	 sort : 'disable',
+	 sortColumn: 0,
+	 sortAscending: false,
+     page: 'enable',     // ページ分割を有効
+     pageSize: 10,       // 1 ページの項目数
+     pagingSymbols: {prev: '前', next: '次'}, // ラベル
+	 };
+	 table.draw(data, t_options);
+	 
+	 
+	var vdata = new google.visualization.DataView(data);
+	//vdata.setColumns([0, 1]);
+	 
+     var chart = new google.visualization.AnnotationChart(document.getElementById('chart_div'));
+
+        var options = {
+          displayAnnotations: true
+        };
+
+     chart.draw(vdata, options);
+     
+     
+		
+	 
+	 // テーブルで選択された時にグラフを選択する
+google.visualization.events.addListener(table, 'select', function() {
+    chart.setSelection(table.getSelection());
+});
+
+// グラフで選択された時にテーブルを選択する
+ google.visualization.events.addListener(chart, 'select', function() {
+     var selection = chart.getSelection();
+     for (var i = 0; i < selection.length; i++) {
+        // 列情報を除去
+        selection[i].column = null;
+     }
+    var selectedItem = chart.getSelection()[0];
+    if(selectedItem!=null){
+    var t_row =  selectedItem.row;
+    //alert(t_row + "," + parseInt(t_row/10));
+     
+     var t_options={
+	//showRowNumber: true,
+	 sort : 'disable',
+	 sortColumn: 0,
+     page: 'enable',     // ページ分割を有効
+     pageSize: 10,       // 1 ページの項目数
+     pagingSymbols: {prev: '前', next: '次'}, // ラベル
+
+	 sortAscending: true, //降順そーと用
+     startPage : parseInt(t_row/10),
+     }
+     table.draw(data,t_options);
+     }
+     table.setSelection(selection);
+ });
+ 
+ // テーブルの sort イベントでグラフをソートする関数を呼び出す。
+ google.visualization.events.addListener( table, 'sort', function(event) {
+     // イベントが発生した列でデータをソート(DataView ではない)
+     data.sort([{column: event.column, desc: !event.ascending}]);
+ 
+     // グラフの再描画
+     chart.draw(data, options);
+ 
+     // テーブルの再描画
+     table_option['sortAscending'] = event.ascending; // ソート昇降順
+     table_option['sortColumn'] = event.column; // ソート列
+     table.draw(vdata, t_option);
+ 
+     // テーブルの選択状態をクリア
+     table.setSelection(null);
+ });
+	 
+}
+</script>
+</head>
+<body>
+    <div id='title'></div>
+    <div id='chart_div' style='width: 1200px; height: 600px;'></div>
+    <div id='table_div' style='width: 1200px; height: 400px;'></div>
+    
+<form name="TZ">
+時間:
+<select name="HM" onChange="drawChart()">>
+<!--<option value="">(※制限なし)?[0-9]</option>-->
+<option value="">(※10分毎)?[0-9]{1,2}:[0-9]1</option>
+<option value="">(※20分毎)?[0-9]{1,2}:[024]1</option>
+<option value="">(※30分毎)?[0-9]{1,2}:[03]1</option>
+<option selected="selected"  value="">(※1時間毎)?[0-9]{1,2}:01</option>
+<option value="">(※24時間毎,17時起点)?(17:01)</option>
+<option value="">(※24時間毎,0時起点)?0:01</option>
+</select>
+</form>
+<div align="right">そくどんwith GOOGLECHART</div>
+  </body>
+</html>

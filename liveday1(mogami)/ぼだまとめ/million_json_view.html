@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>Highcharts Example Compare</title>
+<link href="./dt_json/tbl.css" type="text/css" rel="stylesheet">
+<style type="text/css">
+${demo.css}
+</style>
+<style type="text/css">
+.border td span {
+display: none;
+}
+.border td:hover span {
+display: inline;
+position: absolute;
+background-color: #cccccc;
+color: #000000;
+border-style: solid;
+border-width: 1px;
+border-color: #dedede #666666 #666666 #dedede;
+font-size: .9em;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="./dt_json/moment-with-locales.js"></script>
+<script type="text/javascript" src="./dt_json/bd_high_real.js"></script>
+<script type="text/javascript" src="./dt_json/bd_high_cmp_all.js"></script>
+<script type="text/javascript" src="./dt_json/bd_high_merged.js"></script>
+<script type="text/javascript" src="./dt_json/high_title.js"></script>
+<script type="text/javascript" src="./dt_json/holiday.js"></script>
+<script type="text/javascript">
+<!--
+var border=[];
+for(var i=0;i<base.length;i++){
+border[i]=new Array();
+border[i]['name'] = base[i]['name'];
+border[i]['ibestart'] = base[i]['ibestart'];
+border[i]["data"] = base[i]['data'].concat(real[i]['data']);
+}
+var border_data=border.concat(compare);
+
+
+function GETop(){
+var st="";
+for(var i=0;i<border_data.length;i++){
+
+
+st += "<option>" + border_data[i].name +"</option>";
+}
+
+document.getElementById("op").innerHTML=st;
+
+return false;
+}
+
+window.onload = function(){
+GETop();
+draw_tbl();
+document.getElementById("op").setAttribute("onChange","draw_tbl()");
+
+
+}
+
+function draw_tbl(){
+var st ="";
+var index=document.getElementById("op").selectedIndex;
+
+var bd_tmp={};
+bd_tmp.name=border_data[index].name;
+bd_tmp.ibestart=border_data[index].ibestart;
+bd_tmp.data=[];
+for(var i=0;i<border_data[index].data.length;i++){
+bd_tmp.data[i]=[];
+bd_tmp.data[i][0]=border_data[index].data[i][0];
+bd_tmp.data[i][1]=border_data[index].data[i][1];
+}
+
+
+
+var nokori = document.form1.Radio2.checked;
+var ibejikan= document.form1.Radio3.checked;
+      
+if(nokori){
+bd_tmp=convert_left_time(bd_tmp);
+st="のこり";
+}
+else if(ibejikan && bd_tmp.ibestart !=null){
+
+st ="いべ";
+bd_tmp=convert_ibe_time(bd_tmp);
+
+bd_qs=bd_tmp.data;
+bd_qs.sort(
+function(a,b){
+if( a[0] < b[0] ) return 1;
+if( a[0] > b[0] ) return -1;
+return 0;
+});
+
+}
+else{
+
+ibejikan=false;
+st ="けいか";
+bd_qs=bd_tmp.data;
+bd_qs.sort(
+function(a,b){
+if( a[0] < b[0] ) return 1;
+if( a[0] > b[0] ) return -1;
+return 0;
+});
+}
+
+
+var mkth= "<th>"+st+"じかん</th><th>ぼだ</th>";
+var mktbl="";
+
+for(var i=0;i<bd_tmp.data.length;i++){
+ if(ibejikan){
+ mktbl +=  "<tr><td>"+tmcv(bd_tmp.data[i][0], "YYYY/MM/DD(d) HH:mm",0,0); 
+ }
+ else{
+mktbl +=  "<tr><td>"+(tmcv(bd_tmp.data[i][0], "D",9,0) -1) 
++tmcv(bd_tmp.data[i][0],"日HH時間mm分",9,0) ;
+
+ }
+
+mktbl +="</td><td>"+ addc(bd_tmp.data[i][1]);
+if(ibejikan){
+mktbl += addspan(bd_tmp.data[i][0]);
+}
+mktbl +="</td></tr>";
+}
+
+mkth = "<tr>"+ mkth +"</tr>";
+mktbl= "<table class=\"border\">" + mkth +mktbl + "</table>";
+
+
+document.getElementById("tbl").innerHTML=mktbl;
+}
+
+
+function addc(a) {
+    return String(a).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+}
+
+function isholiday(dt){
+var m =moment(dt);
+m.add('hours', -9);
+
+var year=m.format("YYYY");
+var cpday=m.format("YYYY/MM/DD");
+for(var i=0;i<syukujitsu.length;i++){
+if(year==syukujitsu[i].year){
+for(var k=0;k<syukujitsu[i].data.length;k++){
+var cp=syukujitsu[i].data[k][0];
+if(cp==cpday){
+return syukujitsu[i].data[k][1];
+}}}}
+
+
+if(m.format("d")==0){
+return 1;
+}
+
+return 0;
+}
+
+function addspan(dt){
+
+        var addred= isholiday(dt);
+        var st="";
+        if(addred.length>1){
+        st= "<span>" + addred + "</span>" ;
+        }
+        return st;
+}
+
+function tmcv(dt, tf, t_offset, t_offset_min) {
+    var m = moment(dt);
+    if (t_offset != 9 || t_offset_min != 0) {
+        m.add('hours', -9);
+        m.add('hours', t_offset);
+        m.add('minutes', t_offset_min);
+    }
+    if (tf.indexOf("d") >= 0) {
+        var day = tf.match(/d+/g);
+        var JPday =["日","月","火","水","木","金","土"];
+        var addred= isholiday(dt);
+        var rpstring=JPday[m.format(day[0])];
+        if(addred){
+        rpstring = "[<font color=\"red\">" +rpstring +"</font>]";
+        //if(addred.length>1){
+        //tf += "[<span>" + addred + "</span>]" ;
+        //}
+        }
+      
+        if (day != null) {
+            tf = tf.replace(new RegExp(day[0], "g"), rpstring);
+        }
+    }
+    if (tf.indexOf("Ｈ") >= 0) {
+	    var year = m.format('YYYY');
+        tf = tf.replace("Ｈ", "YY");
+        if(year>2018){
+         m.add('years', -18);
+         if(year==2019 && tf.indexOf("平成")>=0){         
+        tf=tf.replace("YY","元");
+         }
+        tf=tf.replace("平成","新元号");
+        tf=tf.replace("[H]","[NewEmperor]");
+        }
+        else{
+        m.add('years', 12);
+        }
+    }
+    return m.format(tf);
+}
+
+
+function convert_ibe_time(bd){
+
+var addtime = moment(bd.ibestart)+9*3600*1000;
+var ini = Date.UTC(2014,0,1,-9,0);
+
+
+for(var i=0;i< bd.data.length;i++){
+bd.data[i][0] = addtime + bd.data[i][0] - ini;
+}
+
+return bd;
+}
+
+
+function convert_left_time(bd){
+
+var end = ibe_owari;
+var ini = Date.UTC(2014,0,1,-9,0);
+//for(var j=0;j< bd.length;j++){
+
+if(bd.name.match(/[a-z\-\/]+/)!=null){
+end = bd.data[bd.data.length-1][0]
+-bd.data[0][0]+ini;
+}
+
+for(var i=0;i< bd.data.length;i++){
+bd.data[i][0] = end - bd.data[i][0] + ini;
+}
+
+//}
+
+bd_qs=bd.data;
+bd_qs.sort(
+function(a,b){
+if( a[0] > b[0] ) return 1;
+if( a[0] < b[0] ) return -1;
+return 0;
+});
+
+
+return bd;
+}
+
+
+-->
+</script>
+</head>
+<body>
+<form name="form1" action=""　id="zan">
+    <input id="Radio1" name="RadioGroup1" checked="cheacked" type="radio" onChange="draw_tbl()">
+      <label for="Radio1">けいかじかん</label><br/>
+    <input id="Radio2" name="RadioGroup1" type="radio" onChange="draw_tbl()">
+      <label for="Radio2">のこりじかん</label><br />
+    <input id="Radio3" name="RadioGroup1" type="radio" onChange="draw_tbl()">
+      <label for="Radio3">いべじかん(あるものみ)</label>
+  </form>
+
+
+<b>出力対象(必須)</b><br>
+<select id="op" >
+</select>
+
+
+<div id="tbl"> </div>
+
+</body>
+</html>
