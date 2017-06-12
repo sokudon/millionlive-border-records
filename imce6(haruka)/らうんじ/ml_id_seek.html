@@ -1,0 +1,712 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<STYLE type="text/css">
+<!--
+textarea {
+max-width:400px;
+max-height:200px;
+resize: none;
+}
+-->
+</STYLE>
+<title>みりますらうんじ</title>
+</head>
+<body>
+<!--日付変更にmomentjisを使用、ろーかるで動かすにはhttp://momentjs.com/　が必要-->
+<!--<script async src="./../LIB/google.js"></script>
+<script async src="./../LIB/moment-with-locales.js"></script>
+<script async src="./../LIB/xdomain.js"></script>-->
+<script async src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript">
+<!--
+
+
+var rank_bd=0;
+var lgname="";
+
+function stringfilter(text){
+
+var idtxt = document.getElementById("pid").value.replace(new RegExp("^ID;","gm"),"");
+
+var ids=idtxt.match(/^\-?[0-9]+/gm);
+
+if(ids==null){
+
+document.cvcode.elements[0].value = "めんばーIDがみつかりません\r\nらうんじDBかららうんじ選択するか,ぼたん２かぼたん３でめんばーを検索してください";
+return false;
+}
+
+var bd=text.match(/1200位\t([0-9]+)\t(.*?)\t([0-9]+)/);
+if(bd!=null){
+ rank_bd = bd[3];
+}
+
+var st="";
+var out=0;
+
+for(var i=0;i<ids.length;i++){
+var regexp = new RegExp('^.*?\t('+ids[i] + ')\t(.+)', 'gm');
+if(text.match(regexp)!=null){
+var tmp=text.match(regexp);
+//tmp = tmp.replace(/([0-9]+$)/,"$1");
+var st = st + "00000" + tmp +"\n";
+}
+else{
+var regseek= new RegExp(ids[i] + '.+', 'gm');
+if(idtxt.match(regseek)!=null){
+st = st +"DB圏外\t"+ idtxt.match(regseek) + "さんは見つかりませんでした\t--\n";
+}
+else{
+st = st + "DB圏外\t" +ids[i] + "さんは見つかりませんでした\t--\n";
+}
+out++;
+}
+}
+st = st.replace(/^[0-9]+([0-9]{5}位)/gm,"$1");
+
+
+var sum = st.match(/[0-9]+$/gm);
+var cal=0;
+for(var i=0;i<sum.length;i++){
+cal = cal + parseInt(sum[i]);
+}
+
+
+var boda = st.match(/^[0-9]+位/gm);
+var ct=0;
+for(var i=0;i<boda.length;i++){
+var rank = parseInt(boda[i].replace("位"));
+if(rank<=1200){
+ct++;
+}
+}
+
+
+var s = st.split("\n");
+s.sort();
+
+st ="";
+for(var i=0;i<s.length;i++){
+if(s[i].length>1){
+st = st + s[i] ;
+if(document.getElementById("PER").checked){
+st = st + "\t"+ (parseInt(s[i].match("[0-9]+$"))/cal).toFixed(6);
+}
+if(document.getElementById("MAIHI").checked){
+st = st + "\t"+ (parseInt(s[i].match("[0-9]+$"))/rank_bd).toFixed(6);
+}
+st = st  +"\r\n";
+}
+}
+
+var headers="順位\tUID\tプロデューサー名\tすこあ";
+if(document.getElementById("PER").checked){
+headers +="\t総PT割合";
+}
+if(document.getElementById("MAIHI").checked){
+headers +="\t一枚比";
+
+}
+
+st=headers +"\r\n" +st;
+st=st.replace(/NaN/gm,"--");
+
+document.cvcode.elements[0].value = st;
+
+var hyperlink="http://imas.gree-apps.net/app/index.php/mypage/user_profile/id/";
+st=st.replace(/^(.*?)\t([0-9]+)/gm, "$1\t<a href=\""+ hyperlink +"$2\" target=\"_blank\">$2</a>")
+
+
+document.getElementById("tbl").innerHTML = 
+"<table border=\"1\"><tbody><tr><td>" 
++ st.replace(/\t/gm,"</td><td>")
+.replace(/\r\n/gm,"</td></tr><tr><td>")
++"</tbody></table>";
+
+var db= document.DB.db.options[document.DB.db.selectedIndex].text.match(/(\.\/[a-zA-Z0-9_\-]+)\.txt/);
+
+document.getElementById("lin").innerHTML = "<a href=\"" + db[0] +"\">"+ db[0] + "へ</a>";
+
+var tmp="<b>"+ lgname
++"総マスターズPT;" +cal + ","
++"1200以内;" +ct + "人/"+ ids.length +"人中"
++",1200位ぼだ;"+rank_bd
++",らうんじ1枚比;"+cal/rank_bd;
+tmp+="</b>";
+
+
+if(out){
+tmp += "<b>,DB圏外;" + out + "</b>";
+}
+document.getElementById("tbl").innerHTML += tmp;
+}
+
+function stringfilter2(text){
+var id2name = [
+["400000000000000749","アイドルと機関銃"],
+["900000000000000066","🎀春閣下の巣窟🎀"],
+["1300000000000001529","Engage!"],
+["1100000000000000441","7144プロ"],
+["700000000000004707","新月会"],
+["1100000000000003942","Growing Storm!"],
+["200000000000001454","中二病でも恋がしたい！"],
+["1500000000000005236","Starlight*"],
+["700000000000005293","Dreaming()ｽﾍﾞﾗｳ合同"],
+["1701","H@PPYPIECE"],
+["200000000000000623","プロジェクトイオリー"],
+["200000000000000655","KisS"],
+["500000000000005337","頭乙女ストーム！"],
+["1000000000000004988","まったりラウンジ"],
+["5183","スピカ"],
+["1000000000000005146","まっしろぼーどふぇすた"],
+["500000000000004836","春菊天"],
+["500000000000005285","いち◯いち"],
+["600000000000004924","SleePiNG FoReSt"],
+["1500000000000004612","杏奈ちゃんかわいい"],
+["100000000000003573","ミリPの集い"],
+["1500000000000003422","天模様"],
+["400000000000004740","10/4ラウンジ"],
+["1300000000000004000","(*&gt;△&lt;)&lt;ナーンナーンっっ"],
+["1000000000000004785","サービス残業"],
+["3583","N@DESHIKO"],
+["900000000000000466","マケドニア王国"],
+["8","乙女よ大志を抱け!!"],
+["700000000000000909","超A&amp;G+"],
+["700000000000000877","mayちゃん家"],
+["1500000000000004429","R-Grayトラベラー"],
+["500000000000004731","おまつり日和"],
+["400000000000004988","375プロ ∠( のヮの)／"],
+["600000000000000108","765PRO"],
+["1200000000000001065","中二病奥義•三曲の極み"],
+["800000000000000197","Purgatory"],
+["1000000000000001661","👻レアドロ👻は💤💤💤💤"],
+["700000000000005166","🎤あかなちゃん🍮"],
+["700000000000005219","アオノリ工場長"],
+["1500000000000004754","lounge"],
+["1100000000000005161","北上堂〜ぷっぷか支部〜"],
+["400000000000005309","琴の葉の庭🎀"],
+["1100000000000004878","鳩の王子"],
+["1400000000000003630","水夢"],
+["600000000000005167","それからのラウンジ"],
+["200000000000005235","Future The@ter"],
+["1300000000000004534","オジュターイ"],
+["1200000000000005269","しじみ汁をﾌﾞﾚｲｽﾞｱｯﾌﾟ"],
+["100000000000000087","モバ微家のちっちゃな姉"],
+["1500000000000003961","水中…"],
+["1200000000000004966","LiFE!"],
+["200000000000005261","アダルトの星"],
+["5020","デレステ合同"],
+["1000000000000001141","F@ll ahead P"],
+["100000000000001063","767プロ"],
+["200000000000001168","🌱もやし生活始めました🌱"],
+["1124","お姉ちゃんのマッタリ部屋"],
+["1500000000000005117","微熱S.O.S!!"],
+["300000000000005025","あんすりうむ亭ﾐﾘｵﾝ支部"],
+["400000000000004378","水中キャンディ"],
+["500000000000000080","ラビットカリバー"],
+["400000000000000946","salon de btmt"],
+["1300000000000001517","AT1プロデュース"],
+["400000000000001798","眠りラウンジ"],
+["900000000000000376","ｲﾄｰ家の食卓"],
+["400000000000005285","stella"],
+["400000000000001061","みんなと、いっしょに！"],
+["400000000000004049","septentrion"],
+["800000000000003230","猫ちぐら"],
+["100000000000000861","RE→ST@RT"],
+["600000000000004688","秘儀の聖域"],
+["200000000000001721","ソプラノ歌劇団"],
+["1000000000000005059","北上堂〜わさんぼん支部〜"],
+["900000000000005056","JK劇場@路人推し"],
+["200000000000000245","72LOVERS"],
+["1400000000000000239","NouvelleVague"],
+["600000000000001170","スーサイドカーマイン"],
+["300000000000001182","ふりーだむ"],
+["400000000000001425","名無しプロ"],
+["800000000000003373","ハルカな場所へ"],
+["200000000000000273","バルバルーサ"],
+["900000000000005103","かつゆきん家"],
+["900000000000001329","ごーまいうぇ～"],
+["100000000000004736","灯の再覚醒"],
+["400000000000004932","S.P.M"],
+["500000000000000502","HHV(仮)"],
+["600000000000001079","ＣｌａｒｉＳ"],
+["400000000000000741","風雲765城"],
+["200000000000000983","GoodSprings Couriers"],
+["1300000000000003177","夢風"],
+["300000000000004692","おんJアイマス部"],
+["300000000000000433","もやしPARTY！"],
+["4569","✤POKER ω POKER✤"],
+["1400000000000004315","I.D.F"],
+["200000000000000460","無課金ですが何か？"],
+["300000000000000465","ﾙﾝ･ﾌｨｵｰﾚ･ﾈｰｳﾞｪ"],
+["800000000000000130","穴掘高速道路"],
+["500000000000005327","Brand New Theater！"],
+["200000000000000705","LMG"],
+["600000000000003213","765ラウンジ"],
+
+
+["-1","対戦相手"],
+["200000000000003737","1 FOR ALL"],
+
+["200000000000000073","NO MOZUKU NO LIFE"],
+["100000000000002039","stay night"],
+["700000000000003744","ﾋﾞﾋﾞｯと素敵なﾊﾟｰﾘｰﾀｲﾑ"],
+["774","TRY STAR"],
+["700000000000000015","まっﾍﾟﾛ"],
+["82","765・YA-O-TSU支部"],
+["300000000000001143","路子-PrettyRocolingirl-"],
+["1000000000000002719","ab&copy;de"],
+["100000000000000275","♪二階堂千鶴ファンクラブ♪"],
+["1200000000000003927","楽しくやろう"],
+["800000000000000005","アイモバ廃人会"]
+
+
+
+
+];
+
+var USELID = id2name[document.DB2.db.selectedIndex][0];
+
+var regexp = new RegExp('^LID;'+ USELID + '\tID.+', 'gm');
+var m = text.match( regexp);
+var regexp2 = new RegExp('^LID;'+ USELID + '\tID;[0-9]+', 'gm');
+var m = text.match( regexp);
+var mm = text.match( regexp2);
+var s ="";
+
+
+s = s + m[0] + "\r\n";
+for(var i=1; i<m.length; i++){
+if(mm[i]!=mm[i-1]){
+s = s + m[i] + "\r\n";
+}}
+
+s= s.replace(/^LID;[0-9]+\t/gm,"");
+document.rtbcode.r_text.value = s;
+
+parse_border();
+lgname=document.DB2.db.options[document.DB2.db.selectedIndex].text;
+
+return false;
+}
+
+function stringfilter4(text){
+
+var tmp =document.rtbcode.r_text.value;
+
+var ids = tmp.match(/^[0-9]+$/);
+if(ids!=null){
+var USELID = ids;
+
+
+var regexp = new RegExp('^LID;'+ USELID + '\tID.+', 'gm');
+var m = text.match( regexp);
+var regexp2 = new RegExp('^LID;'+ USELID + '\tID;[0-9]+', 'gm');
+var m = text.match( regexp);
+var mm = text.match( regexp2);
+var s ="";
+
+
+s = s + m[0] + "\r\n";
+for(var i=1; i<m.length; i++){
+if(mm[i]!=mm[i-1]){
+s = s + m[i] + "\r\n";
+}}
+
+//t
+//t
+//t
+//s
+
+s= s.replace(/^LID;[0-9]+\t/gm,"");
+document.rtbcode.r_text.value = s;
+
+lgname="らうんじID:" +USELID;
+
+parse_border();
+
+}
+else{
+document.cvcode.elements[0].value = "ラウンジIDがみつかりません\r\n\らうんじIDだけ入力してくださいr\n例:200000000000003737";
+}
+
+return false;
+}
+
+
+function stringfilter3(text){
+var tx= document.rtbcode.r_text.value;
+
+var reg= new RegExp("^.*?"+tx+"(.+)?","gm");
+var ids= text.match(reg);
+
+if(ids!=null){
+var tmp = ids.join(',');
+document.cvcode.elements[0].value = tmp.replace(/,/gm,"\r\n");
+}
+else{
+document.cvcode.elements[0].value = "検索対象がみつかりませんでした";
+}
+
+
+return false;
+}
+
+function cmp_idol(a, b) {
+if( a.a < b.a ) return -1;
+if( a.a > b.a ) return 1;
+return (moment(a.t,"YYYY/MM/DD HH:mm") - moment(a.t,"YYYY/MM/DD HH:mm"));
+}
+
+function cmp_dt(ldt, rdt) {
+return moment(ldt.t,"YYYY/MM/DD HH:mm") - moment(rdt.t,"YYYY/MM/DD HH:mm");
+}
+function cmp_dt2(ldt, rdt) {
+return moment(rdt.t,"YYYY/MM/DD HH:mm") - moment(ldt.t,"YYYY/MM/DD HH:mm");
+}
+function swap_cal(c,a){
+return (c)?-a:a;
+}
+var cmsuuji=function(c,d){
+return  (c!=true) ? d : addc(d);
+}
+function addc(a){
+return String(a).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,' );
+}
+function rmc(a){
+return parseInt(a.replace(new RegExp(",", 'g'), ""));
+}
+function PADLEFT(s,r,k,pt){
+var n=String(s).length;
+if(pt){
+if(n<k){
+for(var i=0;i<k;i++){
+s= r+s;
+}
+if(s.length>k){
+if(s.indexOf("-")>=0){
+s="-"+s.replace("-","");
+}
+if(s.indexOf("nbsp")>0){
+s=s.slice(-n-(k-n)*6);
+}
+else{
+s=s.slice(-k);
+}
+}
+}
+}
+
+return s;
+}
+
+function tmcv(dt,tf,t_offset,t_offset_min){
+var m = moment(dt,"YYYY/MM/DD HH:mm");	if(t_offset!=9 || t_offset_min!=0){
+m.add('hours',-9);
+m.add('hours',t_offset);
+m.add('minutes',t_offset_min);
+}
+if(tf.indexOf("d")>=0){
+var day= tf.match(/d+/g);
+if(day!=null){
+tf=tf.replace(new RegExp(day[0],"g"),"["+m.format(day[0])+"]");
+}
+}
+if(tf.indexOf("Ｈ")>=0){
+tf=tf.replace("Ｈ","YY");
+m.add('years', 12);
+}
+return m.format(tf);
+}
+function rmhtml(a){
+a=a.replace(new RegExp("\</td\>", 'gm'), "\t")
+.replace(new RegExp("\<br/?\>", 'gm'), "\n")
+.replace(new RegExp("\</p\>", 'gm'), "\n")
+.replace(new RegExp("\</tr\>", 'gm'), "\n")
+.replace(new RegExp("\<.*?\>", 'gm'), "");
+return a;
+}
+function fix_url(a){
+if(a.indexOf("http")>=0){
+}
+else if(a.indexOf("ttp")>=0){
+a = "h"+a;
+}
+else{
+a= "http"+a;
+}
+return a.replace("http://127.0.0.1:8823/thread/","");
+}
+function parseData(data){
+stringfilter(rmhtml(data));
+}
+function parseData2(data){
+stringfilter2(rmhtml(data));
+}
+function parseData3(data){
+stringfilter3(rmhtml(data));
+}
+function parseData4(data){
+stringfilter4(rmhtml(data));
+}
+
+function getweb(urls){
+var local= new RegExp("(\.\/[a-zA-Z0-9_\-]+)\.txt");
+var uri= new RegExp("(h?ttps?)?(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)");
+var lcmm=urls.match(local);
+var urlm=urls.match(uri);
+var text="";
+var your_url="";
+
+if(lcmm[0]=="./VIEWimcemember.txt"){
+your_url="imcemember.txt";
+$.get(your_url,parseData4);
+}
+else if(lcmm[0]=="./06090019-lgmax.txt"){
+your_url=lcmm[0];
+$.get(your_url,parseData3);
+}
+else if(lcmm[0]=="./imcemember.txt"){
+your_url=lcmm[0];
+$.get(your_url,parseData2);
+}
+else if(lcmm!=null){
+your_url=lcmm[0];
+$.get(your_url,parseData);
+}
+else if(urlm!=null){
+your_url=fix_url(urlm[0]);
+text ="";
+$.ajax({
+url: your_url,
+type: 'GET',
+timeout: 10000,
+success: function(res) {
+text = res.responseText;
+stringfilter(rmhtml(text));
+}
+});
+}
+return false;
+}
+
+	function parse_border(){
+	getweb(document.DB.db.options[document.DB.db.selectedIndex].text);
+	return false;
+	}
+	
+	function parse_lounge(){
+	 var DB =  "./imcemember.txt";
+	getweb(DB);
+	return false;
+	}
+	
+	function seek_lounge(){
+	 var DB =  "./06090019-lgmax.txt";
+	getweb(DB);
+	return false;
+	}
+	
+	function view_lounge(){
+	 var DB =  "./VIEWimcemember.txt";
+	getweb(DB);
+	return false;
+	}
+	
+	
+	
+-->
+</script>
+<a href="./../index.html">TOP</a><br>
+<H1>みりますらうんじ</H1>
+<form name="DB2">
+<b>使用らうんじDB</b><br>
+<select name="db" onChange="parse_lounge()">
+<option>アイドルと機関銃</option>
+<option>🎀春閣下の巣窟🎀</option>
+<option>Engage!</option>
+<option>7144プロ</option>
+<option>新月会</option>
+<option>Growing Storm!</option>
+<option>中二病でも恋がしたい！</option>
+<option>Starlight*</option>
+<option>Dreaming()ｽﾍﾞﾗｳ合同</option>
+<option>H@PPYPIECE</option>
+<option>プロジェクトイオリー</option>
+<option>KisS</option>
+<option>頭乙女ストーム！</option>
+<option>まったりラウンジ</option>
+<option>スピカ</option>
+<option>まっしろぼーどふぇすた</option>
+<option>春菊天</option>
+<option>いち◯いち</option>
+<option>SleePiNG FoReSt</option>
+<option>杏奈ちゃんかわいい</option>
+<option>ミリPの集い</option>
+<option>天模様</option>
+<option>10/4ラウンジ</option>
+<option>(*&gt;△&lt;)&lt;ナーンナーンっっ</option>
+<option>サービス残業</option>
+<option>N@DESHIKO</option>
+<option>マケドニア王国</option>
+<option>乙女よ大志を抱け!!</option>
+<option>超A&amp;G+</option>
+<option>mayちゃん家</option>
+<option>R-Grayトラベラー</option>
+<option>おまつり日和</option>
+<option>375プロ ∠( のヮの)／</option>
+<option>765PRO</option>
+<option>中二病奥義•三曲の極み</option>
+<option>Purgatory</option>
+<option>👻レアドロ👻は💤💤💤💤</option>
+<option>🎤あかなちゃん🍮</option>
+<option>アオノリ工場長</option>
+<option>lounge</option>
+<option>北上堂〜ぷっぷか支部〜</option>
+<option>琴の葉の庭🎀</option>
+<option>鳩の王子</option>
+<option>水夢</option>
+<option>それからのラウンジ</option>
+<option>Future The@ter</option>
+<option>オジュターイ</option>
+<option>しじみ汁をﾌﾞﾚｲｽﾞｱｯﾌﾟ</option>
+<option>モバ微家のちっちゃな姉</option>
+<option>水中…</option>
+<option>LiFE!</option>
+<option>アダルトの星</option>
+<option>デレステ合同</option>
+<option>F@ll ahead P</option>
+<option>767プロ</option>
+<option>🌱もやし生活始めました🌱</option>
+<option>お姉ちゃんのマッタリ部屋</option>
+<option>微熱S.O.S!!</option>
+<option>あんすりうむ亭ﾐﾘｵﾝ支部</option>
+<option>水中キャンディ</option>
+<option>ラビットカリバー</option>
+<option>salon de btmt</option>
+<option>AT1プロデュース</option>
+<option>眠りラウンジ</option>
+<option>ｲﾄｰ家の食卓</option>
+<option>stella</option>
+<option>みんなと、いっしょに！</option>
+<option>septentrion</option>
+<option>猫ちぐら</option>
+<option>RE→ST@RT</option>
+<option>秘儀の聖域</option>
+<option>ソプラノ歌劇団</option>
+<option>北上堂〜わさんぼん支部〜</option>
+<option>JK劇場@路人推し</option>
+<option>72LOVERS</option>
+<option>NouvelleVague</option>
+<option>スーサイドカーマイン</option>
+<option>ふりーだむ</option>
+<option>名無しプロ</option>
+<option>ハルカな場所へ</option>
+<option>バルバルーサ</option>
+<option>かつゆきん家</option>
+<option>ごーまいうぇ～</option>
+<option>灯の再覚醒</option>
+<option>S.P.M</option>
+<option>HHV(仮)</option>
+<option>ＣｌａｒｉＳ</option>
+<option>風雲765城</option>
+<option>GoodSprings Couriers</option>
+<option>夢風</option>
+<option>おんJアイマス部</option>
+<option>もやしPARTY！</option>
+<option>✤POKER ω POKER✤</option>
+<option>I.D.F</option>
+<option>無課金ですが何か？</option>
+<option>ﾙﾝ･ﾌｨｵｰﾚ･ﾈｰｳﾞｪ</option>
+<option>穴掘高速道路</option>
+<option>Brand New Theater！</option>
+<option>LMG</option>
+<option>765ラウンジ</option>
+
+
+<option>--マッチング対戦相手-----</option>
+<option selected="selected">1 FOR ALL</option>
+<option>第1ステージ NO MOZUKU NO LIFE</option>
+<option>第2ステージ stay night</option>
+<option>第3ステージ ﾋﾞﾋﾞｯと素敵なﾊﾟｰﾘｰﾀｲﾑ</option>
+<option>第4ステージ TRY STAR</option>
+<option>第5ステージ まっﾍﾟﾛ</option>
+<option>第6ステージ 765・YA-O-TSU支部</option>
+<option>第7ステージ 路子-PrettyRocolingirl-</option>
+<option>第8ステージ ab&copy;de</option>
+<option>第9ステージ ♪二階堂千鶴ファンクラブ♪</option>
+<option>第10ステージ 楽しくやろう</option>
+<option>第11ステージ アイモバ廃人会</option>
+
+</select>
+</form>
+
+<b>はいぱーりんく:</b><a href="imcemember.txt"><b>らうめんTXT</b></a>　<a href="./06090019-lgmax.txt"><b>らうんじTXT</b></a><br>
+<br>
+<form name="DB">
+<b>使用らんきんぐDB</b><br>
+<select name="db" onChange="parse_border()">
+<option value="">./06121148-pt.txt STAGE12,20kまで</option>
+<option value="">./06111928-pt.txt STAGE11,20kまで</option>
+<option value="">./06111328-pt.txt STAGE10,20kまで</option>
+<option value="">./06110027-pt.txt STAGE9,20kまで</option>
+<option value="">./06101936-pt.txt STAGE8,20kまで</option>
+<option value="">./06101334-pt.txt STAGE7,20kまで</option>
+<option value="">./06100029-pt.txt STAGE6,20kまで</option>
+<option value="">./06091930-pt.txt STAGE5,20kまで</option>
+<option value="">./06091338-pt.txt STAGE4,20kまで</option>
+<option value="">./06090027-pt.txt STAGE3,20kまで</option>
+<option value="">./06081940-pt.txt STAGE2,20kまで</option>
+<option value="">./06081346-pt.txt STAGE1,20kまで</option>
+</select>
+</form>
+
+
+<b>はいぱーりんく:</b><div id="lin">　</div>
+<b>出力オプション</b><br>
+<label for="PER"><input type="checkbox"id="PER" onChange="parse_lounge()">個人別総マスターズPT割合を表示</label><br>
+<label for="MAIHI"><input type="checkbox"id="MAIHI" onChange="parse_lounge()">１枚比(1200位ぼだ)を表示</label><br>
+<br>
+<b>1:ぷろぢゅーさーID/2:らうんじ名など/3:らうんじID;入力:</b><form name="rtbcode">
+<textarea name="r_text" rows="10" cols="200"  id="pid">
+
+//1faめんばの　ID[タブ]名前の順
+1100000000000026770	zumi@1FA
+1100000000000034715	akira95
+400000000000010120	DEKKER-P
+1300000000000004142	どんいんぐ@したらば
+1100000000000007246	しーどる
+300000000000011012	オルフェウス@同僚募集中
+400000000000052323	ミリ＠踏み台P/1FA
+700000000000057776	Lad
+500000000000057187	にょづき
+100000000000003471	しん
+800000000000099802	Suuki
+500000000000056720	伴野摩耶 
+</textarea><br>
+<input type="Submit" value="1:めんばID検索表示" Generate" onclick="getweb(document.DB.db.options[document.DB.db.selectedIndex].text);return false;">
+<input type="Submit" value="2:らうんじ名/ID/らんく検索表示" Generate" onclick="seek_lounge();return false;">
+<input type="Submit" value="3:らうんじIDでめんば表示" Generate" onclick="view_lounge();return false;">
+<input type="reset" value="初期化">
+</form>
+<form name="cvcode">
+<textarea name="c_text" rows="10" cols="200"></textarea>
+</form>
+<b>てーぶる:</b><br>
+<div id="tbl">　</div><br>
+<p>
+2017/04/22
+IDハイパリンクを追加
+NaNを--表示に変更
+一枚比をついか
+らうんじID,名検索を追加
+<a name="BR"><h4>・動作確認済ブラウザ<br></a>
+PC:IE11,FIREFOX,CHROME<br>
+iOS:SAFARI<br>
+ANDROID:CHROME,FIREFOX　（※標準ブラウザ他は変換行数制限があるようなので非推奨)<br>
+</h4>
+</p>
+</body>
+</html>

@@ -1,0 +1,24 @@
+
+var ibe_title = "<b>ますたーずかっぷ らうんじとっぷ</b>";
+var ibe_rank = "<b>しょこらはうすぼだ　(すばる)</b>";
+
+var display300 =false;
+
+var ibe_point = 'ますたーず pt';
+//var ibe_type = 'きずなふぇすぼだ';
+//var ibe_type = "すたーらいぶぼだ";
+//var ibe_type = 'あいどるどうぼだ';
+//var ibe_type = 'ちょこまらそんぼだ';
+var ibe_type = 'ますたーずかっぷぼだ';
+
+//highstockりあるたいむよう　おぷしょん
+var tosikosi=false;//年こし数字補正用、年末時はtrue
+
+var base_year=2015;//ぼだ開始年
+
+var ibe_kaishi=Date.UTC(2015,1,20,17,0);//いべんと開始日時 tuki-1
+
+var ibe_owari=Date.UTC(2015,1,25,0,0) //いべんと終了日時 tuki-1
+- ibe_kaishi+Date.UTC(2014,0,1,-9,0);
+
+var dtd=0;//つーるちっぷ;０でいべんと日付のみ　こんぺあは経過時間のみ、1で両方表示
