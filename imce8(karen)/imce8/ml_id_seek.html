@@ -1,0 +1,680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<STYLE type="text/css">
+<!--
+textarea {
+max-width:400px;
+max-height:200px;
+resize: none;
+}
+-->
+</STYLE>
+<title>みりますらうんじ</title>
+</head>
+<body>
+<!--日付変更にmomentjisを使用、ろーかるで動かすにはhttp://momentjs.com/　が必要-->
+<!--<script async src="./../LIB/google.js"></script>
+<script async src="./../LIB/moment-with-locales.js"></script>
+<script async src="./../LIB/xdomain.js"></script>-->
+<script async src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript">
+<!--
+
+
+var rank_bd=0;
+var lgname="";
+
+function stringfilter(text){
+
+var idtxt = document.getElementById("pid").value.replace(new RegExp("^ID;","gm"),"");
+
+var ids=idtxt.match(/^\-?[0-9]+/gm);
+
+if(ids==null){
+
+document.cvcode.elements[0].value = "めんばーIDがみつかりません\r\nらうんじDBかららうんじ選択するか,ぼたん２かぼたん３でめんばーを検索してください";
+return false;
+}
+
+var bd=text.match(/1200位\t([0-9]+)\t(.*?)\t([0-9]+)/);
+if(bd!=null){
+ rank_bd = bd[3];
+}
+
+var st="";
+var out=0;
+
+for(var i=0;i<ids.length;i++){
+var regexp = new RegExp('^.*?\t('+ids[i] + ')\t(.+)', 'gm');
+if(text.match(regexp)!=null){
+var tmp=text.match(regexp);
+//tmp = tmp.replace(/([0-9]+$)/,"$1");
+var st = st + "00000" + tmp +"\n";
+}
+else{
+var regseek= new RegExp(ids[i] + '.+', 'gm');
+if(idtxt.match(regseek)!=null){
+st = st +"DB圏外\t"+ idtxt.match(regseek) + "さんは見つかりませんでした\t--\n";
+}
+else{
+st = st + "DB圏外\t" +ids[i] + "さんは見つかりませんでした\t--\n";
+}
+out++;
+}
+}
+st = st.replace(/^[0-9]+([0-9]{5}位)/gm,"$1");
+
+
+var sum = st.match(/[0-9]+$/gm);
+var cal=0;
+for(var i=0;i<sum.length;i++){
+cal = cal + parseInt(sum[i]);
+}
+
+
+var boda = st.match(/^[0-9]+位/gm);
+var ct=0;
+for(var i=0;i<boda.length;i++){
+var rank = parseInt(boda[i].replace("位"));
+if(rank<=1200){
+ct++;
+}
+}
+
+
+var s = st.split("\n");
+s.sort();
+
+st ="";
+for(var i=0;i<s.length;i++){
+if(s[i].length>1){
+st = st + s[i] ;
+if(document.getElementById("PER").checked){
+st = st + "\t"+ (parseInt(s[i].match("[0-9]+$"))/cal).toFixed(6);
+}
+if(document.getElementById("MAIHI").checked){
+st = st + "\t"+ (parseInt(s[i].match("[0-9]+$"))/rank_bd).toFixed(6);
+}
+st = st  +"\r\n";
+}
+}
+
+var headers="順位\tUID\tプロデューサー名\tすこあ";
+if(document.getElementById("PER").checked){
+headers +="\t総PT割合";
+}
+if(document.getElementById("MAIHI").checked){
+headers +="\t一枚比";
+
+}
+
+st=headers +"\r\n" +st;
+st=st.replace(/NaN/gm,"--");
+
+document.cvcode.elements[0].value = st;
+
+var hyperlink="http://imas.gree-apps.net/app/index.php/mypage/user_profile/id/";
+st=st.replace(/^(.*?)\t([0-9]+)/gm, "$1\t<a href=\""+ hyperlink +"$2\" target=\"_blank\">$2</a>")
+
+
+document.getElementById("tbl").innerHTML = 
+"<table border=\"1\"><tbody><tr><td>" 
++ st.replace(/\t/gm,"</td><td>")
+.replace(/\r\n/gm,"</td></tr><tr><td>")
++"</tbody></table>";
+
+var db= document.DB.db.options[document.DB.db.selectedIndex].text.match(/(\.\/[a-zA-Z0-9_\-]+)\.txt/);
+
+document.getElementById("lin").innerHTML = "<a href=\"" + db[0] +"\">"+ db[0] + "へ</a>";
+
+var tmp="<b>"+ lgname
++"総マスターズPT;" +cal + ","
++"1200以内;" +ct + "人/"+ ids.length +"人中"
++",1200位ぼだ;"+rank_bd
++",らうんじ1枚比;"+cal/rank_bd;
+tmp+="</b>";
+
+
+if(out){
+tmp += "<b>,DB圏外;" + out + "</b>";
+}
+document.getElementById("tbl").innerHTML += tmp;
+}
+
+function stringfilter2(text){
+var id2name = [
+["1701","H@PPYPIECE"],
+["400000000000000749","アイドルと機関銃"],
+["100000000000005060","光鍋"],
+["300000000000004806","ｽﾍﾞｯても平気なﾗｳﾝｼﾞ"],
+["1500000000000005373","う20"],
+["1100000000000000441","7144プロ"],
+["300000000000005227","TrySail"],
+["1000000000000005146","ホワイトボードフェスタ"],
+["5183","スピカ"],
+["500000000000005337","頭乙女ストーム！"],
+["200000000000005393","ツキノワ熊の会"],
+["700000000000004707","新月会"],
+["1000000000000004988","まったりラウンジ"],
+["100000000000003573","ミリPの集い"],
+["500000000000005285","いち◯いち"],
+["200000000000005235","Future The@ter"],
+["700000000000005219","アオノリ工場長"],
+["1500000000000005236","Starlight*"],
+["3583","N@DESHIKO"],
+["900000000000005056","JK劇場@路人推し"],
+["400000000000004049","septentrion"],
+["1100000000000004878","鳩の王子"],
+["200000000000005261","アダルトの星"],
+["1000000000000004785","サービス残業"],
+["1100000000000005161","ﾍ( ＊´ｖ`＊ﾍ)))〜"],
+["400000000000004740","10/4ラウンジ"],
+["200000000000001168","🌱もやし生活始めました🌱"],
+["600000000000004925","Dreaming!(🔥)"],
+["1000000000000005059","ﾍ( ＊´ｖ`＊ﾍ)))"],
+["1400000000000004882","ぷらちなすたーず☆彡"],
+["1500000000000003961","ID:【OL】"],
+["700000000000000909","超A&amp;G+"],
+["1000000000000001141","F@ll ahead P"],
+["1400000000000003630","水夢"],
+["1300000000000004534","オジュターイ"],
+["1000000000000001661","しゃぶしゃぶも好きです"],
+["600000000000001170","スーサイドカーマイン"],
+["600000000000001079","ＣｌａｒｉＳ"],
+["900000000000001329","ごーまいうぇ～"],
+["1124","お姉ちゃんのマッタリ部屋"],
+["700000000000003219","シアターの日常"],
+["500000000000000080","ラビットカリバー"],
+["1300000000000000946","First Step"],
+["500000000000002640","アイマス同好会"],
+["900000000000000066","🎀春閣下の巣窟🎀"],
+["4569","✤POKER ω POKER✤"],
+["1200000000000001457","Sora"],
+["1500000000000000252","Z団"],
+["200000000000000655","KisS"],
+["1400000000000000221","すらくら@IMCですよ！"],
+["700000000000000877","mayちゃん家"],
+["300000000000005025","あんすりうむ亭ﾐﾘｵﾝ支部"],
+["5102","IMCEまでのラウンジ"],
+["500000000000004731","おまつり日和"],
+["600000000000002383","ラビットタンク"],
+["1100000000000003942","Growing Storm!"],
+["700000000000000816","DREAM"],
+["900000000000005103","なまはげーず"],
+["1300000000000001529","Engage!"],
+["600000000000004924","SleePiNG FoReSt"],
+["3704","小(中)学生は最高だぜ！"],
+["400000000000005285","stella"],
+["300000000000001182","ふりーだむ"],
+["900000000000000376","ｲﾄｰ家の食卓"],
+["1000000000000001286","ぼっちによるぼっちの集い"],
+["103","893プロ"],
+["600000000000000108","765PRO"],
+["500000000000004977","ANDプロ"],
+["100000000000004736","灯の再覚醒"],
+["1400000000000000239","NouvelleVague"],
+["700000000000005166","🎤あかなちゃん🍮"],
+["300000000000004692","おんJアイマス部"],
+["400000000000001061","みんなと、いっしょに！"],
+["774","TRY STAR"],
+["900000000000001612","FutureRecord"],
+["900000000000001214","おはぎとお茶と時々ハト"],
+["1725","ちはやよいおり"],
+["600000000000005167","それからのラウンジ"],
+["200000000000003254","乙女フェスティバル"],
+["400000000000000741","風雲765城"],
+["384","アイマス・ミリマスが好き"],
+["500000000000005277","Objective No.3"],
+["500000000000000896","松田重工Evolution"],
+["1000000000000000449","へーちょ。"],
+["1300000000000001517","AT1プロデュース"],
+["1500000000000000010","ガチ☆ムチ"],
+["500000000000004166","R A Y"],
+["200000000000000302","SNK"],
+["100000000000000350","QMA惰性勢"],
+["500000000000005327","Brand New Theater！"],
+["200000000000000273","バルバルーサ"],
+["1200000000000005386","STANDING ALIVE"],
+["400000000000001647","DREAM P Club"],
+["1200000000000005269","しじみ汁をﾌﾞﾚｲｽﾞｱｯﾌﾟ"],
+["800000000000000130","穴掘高速道路"],
+["1400000000000005126","つばゆりあん"],
+["900000000000000605","765らうんじ"],
+["1400000000000000860","激ヤヴァ☆"],
+["1200000000000003630","Project-NEW WORLD-"],
+["2285","はっぴぃ☆ふれんず"]
+
+["-1","対戦相手"],
+["200000000000003737","1 FOR ALL"],
+
+];
+
+var USELID = id2name[document.DB2.db.selectedIndex][0];
+
+var regexp = new RegExp('^LID;'+ USELID + '\tID.+', 'gm');
+var m = text.match( regexp);
+var regexp2 = new RegExp('^LID;'+ USELID + '\tID;[0-9]+', 'gm');
+var m = text.match( regexp);
+var mm = text.match( regexp2);
+var s ="";
+
+
+s = s + m[0] + "\r\n";
+for(var i=1; i<m.length; i++){
+if(mm[i]!=mm[i-1]){
+s = s + m[i] + "\r\n";
+}}
+
+s= s.replace(/^LID;[0-9]+\t/gm,"");
+document.rtbcode.r_text.value = s;
+
+parse_border();
+lgname=document.DB2.db.options[document.DB2.db.selectedIndex].text;
+
+return false;
+}
+
+
+
+function stringfilter4(text){
+
+var tmp =document.rtbcode.r_text.value;
+
+var ids = tmp.match(/^[0-9]+$/);
+if(ids!=null){
+var USELID = ids;
+
+
+var regexp = new RegExp('^LID;'+ USELID + '\tID.+', 'gm');
+var m = text.match( regexp);
+var regexp2 = new RegExp('^LID;'+ USELID + '\tID;[0-9]+', 'gm');
+var m = text.match( regexp);
+var mm = text.match( regexp2);
+var s ="";
+
+
+s = s + m[0] + "\r\n";
+for(var i=1; i<m.length; i++){
+if(mm[i]!=mm[i-1]){
+s = s + m[i] + "\r\n";
+}}
+
+//t
+//t
+//t
+//s
+
+s= s.replace(/^LID;[0-9]+\t/gm,"");
+document.rtbcode.r_text.value = s;
+
+lgname="らうんじID:" +USELID;
+
+parse_border();
+
+}
+else{
+document.cvcode.elements[0].value = "ラウンジIDがみつかりません\r\n"
++"メンバ全員を探すときはらうんじIDだけ入力してください,例:200000000000003737\r\n\r\n"
++"☆プロ名検索モード\r\n";
+
+var regexp = new RegExp('^LID;[0-9]+\tID;[0-9]+\t.*'+tmp+".*", 'gm');
+
+var m=text.match(regexp);
+document.cvcode.elements[0].value+=m.join(',').replace(/,/gm,"\r\n");
+}
+
+return false;
+}
+
+
+function stringfilter3(text){
+var tx= document.rtbcode.r_text.value;
+
+var reg= new RegExp("^.*?"+tx+"(.+)?","gm");
+var ids= text.match(reg);
+
+if(ids!=null){
+var tmp = ids.join(',');
+document.cvcode.elements[0].value = tmp.replace(/,/gm,"\r\n");
+}
+else{
+document.cvcode.elements[0].value = "検索対象がみつかりませんでした";
+}
+
+
+return false;
+}
+
+function cmp_idol(a, b) {
+if( a.a < b.a ) return -1;
+if( a.a > b.a ) return 1;
+return (moment(a.t,"YYYY/MM/DD HH:mm") - moment(a.t,"YYYY/MM/DD HH:mm"));
+}
+
+function cmp_dt(ldt, rdt) {
+return moment(ldt.t,"YYYY/MM/DD HH:mm") - moment(rdt.t,"YYYY/MM/DD HH:mm");
+}
+function cmp_dt2(ldt, rdt) {
+return moment(rdt.t,"YYYY/MM/DD HH:mm") - moment(ldt.t,"YYYY/MM/DD HH:mm");
+}
+function swap_cal(c,a){
+return (c)?-a:a;
+}
+var cmsuuji=function(c,d){
+return  (c!=true) ? d : addc(d);
+}
+function addc(a){
+return String(a).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,' );
+}
+function rmc(a){
+return parseInt(a.replace(new RegExp(",", 'g'), ""));
+}
+function PADLEFT(s,r,k,pt){
+var n=String(s).length;
+if(pt){
+if(n<k){
+for(var i=0;i<k;i++){
+s= r+s;
+}
+if(s.length>k){
+if(s.indexOf("-")>=0){
+s="-"+s.replace("-","");
+}
+if(s.indexOf("nbsp")>0){
+s=s.slice(-n-(k-n)*6);
+}
+else{
+s=s.slice(-k);
+}
+}
+}
+}
+
+return s;
+}
+
+function tmcv(dt,tf,t_offset,t_offset_min){
+var m = moment(dt,"YYYY/MM/DD HH:mm");	if(t_offset!=9 || t_offset_min!=0){
+m.add('hours',-9);
+m.add('hours',t_offset);
+m.add('minutes',t_offset_min);
+}
+if(tf.indexOf("d")>=0){
+var day= tf.match(/d+/g);
+if(day!=null){
+tf=tf.replace(new RegExp(day[0],"g"),"["+m.format(day[0])+"]");
+}
+}
+if(tf.indexOf("Ｈ")>=0){
+tf=tf.replace("Ｈ","YY");
+m.add('years', 12);
+}
+return m.format(tf);
+}
+function rmhtml(a){
+a=a.replace(new RegExp("\</td\>", 'gm'), "\t")
+.replace(new RegExp("\<br/?\>", 'gm'), "\n")
+.replace(new RegExp("\</p\>", 'gm'), "\n")
+.replace(new RegExp("\</tr\>", 'gm'), "\n")
+.replace(new RegExp("\<.*?\>", 'gm'), "");
+return a;
+}
+function fix_url(a){
+if(a.indexOf("http")>=0){
+}
+else if(a.indexOf("ttp")>=0){
+a = "h"+a;
+}
+else{
+a= "http"+a;
+}
+return a.replace("http://127.0.0.1:8823/thread/","");
+}
+function parseData(data){
+stringfilter(rmhtml(data));
+}
+function parseData2(data){
+stringfilter2(rmhtml(data));
+}
+function parseData3(data){
+stringfilter3(rmhtml(data));
+}
+function parseData4(data){
+stringfilter4(rmhtml(data));
+}
+
+function getweb(urls){
+var local= new RegExp("(\.\/[a-zA-Z0-9_\-]+)\.txt");
+var uri= new RegExp("(h?ttps?)?(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)");
+var lcmm=urls.match(local);
+var urlm=urls.match(uri);
+var text="";
+var your_url="";
+
+if(lcmm[0]=="./VIEWimcemember.txt"){
+your_url="imcemember.txt";
+$.get(your_url,parseData4);
+}
+else if(lcmm[0]==loungemaxtxt){
+your_url=lcmm[0];
+$.get(your_url,parseData3);
+}
+else if(lcmm[0]=="./imcemember.txt"){
+your_url=lcmm[0];
+$.get(your_url,parseData2);
+}
+else if(lcmm!=null){
+your_url=lcmm[0];
+$.get(your_url,parseData);
+}
+else if(urlm!=null){
+your_url=fix_url(urlm[0]);
+text ="";
+$.ajax({
+url: your_url,
+type: 'GET',
+timeout: 10000,
+success: function(res) {
+text = res.responseText;
+stringfilter(rmhtml(text));
+}
+});
+}
+return false;
+}
+
+	function parse_border(){
+	getweb(document.DB.db.options[document.DB.db.selectedIndex].text);
+	return false;
+	}
+	
+	function parse_lounge(){
+	 var DB =  "./imcemember.txt";
+	getweb(DB);
+	return false;
+	}
+	var loungemaxtxt="./10200035-lgmax.txt"
+	
+	function seek_lounge(){
+	 var DB =  loungemaxtxt;
+	getweb(DB);
+	return false;
+	}
+	
+	function view_lounge(){
+	 var DB =  "./VIEWimcemember.txt";
+	getweb(DB);
+	return false;
+	}	
+	
+	
+	
+	
+-->
+</script>
+<a href="./../index.html">TOP</a><br>
+<H1>みりますらうんじ</H1>
+<form name="DB2">
+<b>使用らうんじDB</b><br>
+<select name="db" onChange="parse_lounge()">
+<option>H@PPYPIECE</option>
+<option>アイドルと機関銃</option>
+<option>光鍋</option>
+<option>ｽﾍﾞｯても平気なﾗｳﾝｼﾞ</option>
+<option>う20</option>
+<option>7144プロ</option>
+<option>TrySail</option>
+<option>ホワイトボードフェスタ</option>
+<option>スピカ</option>
+<option>頭乙女ストーム！</option>
+<option>ツキノワ熊の会</option>
+<option>新月会</option>
+<option>まったりラウンジ</option>
+<option>ミリPの集い</option>
+<option>いち◯いち</option>
+<option>Future The@ter</option>
+<option>アオノリ工場長</option>
+<option>Starlight*</option>
+<option>N@DESHIKO</option>
+<option>JK劇場@路人推し</option>
+<option>septentrion</option>
+<option>鳩の王子</option>
+<option>アダルトの星</option>
+<option>サービス残業</option>
+<option>ﾍ( ＊´ｖ`＊ﾍ)))〜</option>
+<option>10/4ラウンジ</option>
+<option>🌱もやし生活始めました🌱</option>
+<option>Dreaming!(🔥)</option>
+<option>ﾍ( ＊´ｖ`＊ﾍ)))</option>
+<option>ぷらちなすたーず☆彡</option>
+<option>ID:【OL】</option>
+<option>超A&amp;G+</option>
+<option>F@ll ahead P</option>
+<option>水夢</option>
+<option>オジュターイ</option>
+<option>しゃぶしゃぶも好きです</option>
+<option>スーサイドカーマイン</option>
+<option>ＣｌａｒｉＳ</option>
+<option>ごーまいうぇ～</option>
+<option>お姉ちゃんのマッタリ部屋</option>
+<option>シアターの日常</option>
+<option>ラビットカリバー</option>
+<option>First Step</option>
+<option>アイマス同好会</option>
+<option>🎀春閣下の巣窟🎀</option>
+<option>✤POKER ω POKER✤</option>
+<option>Sora</option>
+<option>Z団</option>
+<option>KisS</option>
+<option>すらくら@IMCですよ！</option>
+<option>mayちゃん家</option>
+<option>あんすりうむ亭ﾐﾘｵﾝ支部</option>
+<option>IMCEまでのラウンジ</option>
+<option>おまつり日和</option>
+<option>ラビットタンク</option>
+<option>Growing Storm!</option>
+<option>DREAM</option>
+<option>なまはげーず</option>
+<option>Engage!</option>
+<option>SleePiNG FoReSt</option>
+<option>小(中)学生は最高だぜ！</option>
+<option>stella</option>
+<option>ふりーだむ</option>
+<option>ｲﾄｰ家の食卓</option>
+<option>ぼっちによるぼっちの集い</option>
+<option>893プロ</option>
+<option>765PRO</option>
+<option>ANDプロ</option>
+<option>灯の再覚醒</option>
+<option>NouvelleVague</option>
+<option>🎤あかなちゃん🍮</option>
+<option>おんJアイマス部</option>
+<option>みんなと、いっしょに！</option>
+<option>TRY STAR</option>
+<option>FutureRecord</option>
+<option>おはぎとお茶と時々ハト</option>
+<option>ちはやよいおり</option>
+<option>それからのラウンジ</option>
+<option>乙女フェスティバル</option>
+<option>風雲765城</option>
+<option>アイマス・ミリマスが好き</option>
+<option>Objective No.3</option>
+<option>松田重工Evolution</option>
+<option>へーちょ。</option>
+<option>AT1プロデュース</option>
+<option>ガチ☆ムチ</option>
+<option>R A Y</option>
+<option>SNK</option>
+<option>QMA惰性勢</option>
+<option>Brand New Theater！</option>
+<option>バルバルーサ</option>
+<option>STANDING ALIVE</option>
+<option>DREAM P Club</option>
+<option>しじみ汁をﾌﾞﾚｲｽﾞｱｯﾌﾟ</option>
+<option>穴掘高速道路</option>
+<option>つばゆりあん</option>
+<option>765らうんじ</option>
+<option>激ヤヴァ☆</option>
+<option>Project-NEW WORLD-</option>
+<option>はっぴぃ☆ふれんず</option>
+
+</select>
+</form>
+
+<b>はいぱーりんく:</b><a href="imcemember.txt"><b>らうめんTXT</b></a>
+<a href="./10200035-lgmax.txt"><b>らうんじTXT</b></a><br>
+<br>
+<form name="DB">
+<b>使用らんきんぐDB</b><br>
+<select name="db" onChange="parse_border()">
+<option value="">./ STAGE12,20kまで</option>
+<option value="">./ STAGE11,20kまで</option>
+<option value="">./10221656-pt.txt STAGE10,20kまで</option>
+<option value="">./10220033-pt.txt STAGE9,20kまで</option>
+<option value="">./10211934-pt.txt STAGE8,20kまで</option>
+<option value="">./10211506-pt.txt STAGE7,20kまで</option>
+<option value="">./10210038-pt.txt STAGE6,20kまで</option>
+<option value="">./10202127-pt.txt STAGE5,20kまで</option>
+<option value="">./10201337-pt.txt STAGE4,20kまで</option>
+<option value="">./10200057-pt.txt STAGE3,20kまで</option>
+<option value="">./10192017-pt.txt STAGE2,20kまで</option>
+<option value="">./10191327-pt.txt STAGE1,20kまで</option>
+</select>
+</form>
+
+
+<b>はいぱーりんく:</b><div id="lin">　</div>
+<b>出力オプション</b><br>
+<label for="PER"><input type="checkbox"id="PER" onChange="parse_lounge()">個人別総マスターズPT割合を表示</label><br>
+<label for="MAIHI"><input type="checkbox"id="MAIHI" onChange="parse_lounge()">１枚比(1200位ぼだ)を表示</label><br>
+<br>
+<b>1:ぷろぢゅーさーID/2:らうんじ名など/3:らうんじID;入力:</b><form name="rtbcode">
+<textarea name="r_text" rows="10" cols="200"  id="pid">
+
+</textarea><br>
+<input type="Submit" value="1:めんばID検索表示" Generate" onclick="getweb(document.DB.db.options[document.DB.db.selectedIndex].text);return false;">
+<input type="Submit" value="2:らうんじ名/ID/らんく検索表示" Generate" onclick="seek_lounge();return false;">
+<input type="Submit" value="3:らうんじID/P名でめんば表示" Generate" onclick="view_lounge();return false;">
+<input type="reset" value="初期化">
+</form>
+<form name="cvcode">
+<textarea name="c_text" rows="10" cols="200"></textarea>
+</form>
+<b>てーぶる:</b><br>
+<div id="tbl">　</div><br>
+<p>
+2017/04/22
+IDハイパリンクを追加
+NaNを--表示に変更
+一枚比をついか
+らうんじID,名検索を追加
+<a name="BR"><h4>・動作確認済ブラウザ<br></a>
+PC:IE11,FIREFOX,CHROME<br>
+iOS:SAFARI<br>
+ANDROID:CHROME,FIREFOX　（※標準ブラウザ他は変換行数制限があるようなので非推奨)<br>
+</h4>
+</p>
+</body>
+</html>
