@@ -1,0 +1,230 @@
+(function(){
+	
+	var alpha = [null,
+	'天海春香','如月千早','星井美希','萩原雪歩','高槻やよい','菊地真','水瀬伊織','四条貴音','秋月律子','三浦あずさ',
+	'双海亜美','双海真美','我那覇響',
+	'春日未来','最上静香','伊吹翼','田中琴葉','島原エレナ','佐竹美奈子','所恵美',
+	'徳川まつり','箱崎星梨花','野々原茜','望月杏奈','ロコ','七尾百合子','高山紗代子','松田亜利沙','高坂海美','中谷育',
+	'天空橋朋花','エミリー','北沢志保','舞浜歩','木下ひなた','矢吹可奈','横山奈緒','二階堂千鶴','馬場このみ','大神環',
+	'豊川風花','宮尾美也','福田のり子','真壁瑞希','篠宮可憐','百瀬莉緒','永吉昴','北上麗花','周防桃子','ジュリア'
+	];
+	
+	//ぺーじを作製	
+    var idolid = [1,
+    			14,15,16,17,18,19,
+    			20,21,22,23,24,25,26,27,28,29,
+    			30,31,32,33,34,35,36,37,38,39,
+    			40,41,42,43,44,45,46,47,48,49,50
+    			 ];//ちーむばんごう
+    			 
+    var idolnamebase = [0];//5,10,15,20,25,30];//らんきんぐのぺーじ 1だと10位まで
+    var idolname=[];
+    var idolidmk=[];
+    var startpage=1;
+    var interval=0;//ぺーじ分で折り返し
+    
+    //var idolnamebase=[];for(var i=0;i<interval;i++){idolnamebase[i]=i+startpage;}
+    interval=idolnamebase.length;
+    var total=interval*idolid.length;
+    
+    for(var i=0,k=0,l=0;i<total;i++,k++){
+    if(k==interval){k=0;l++;}
+    idolname[i]=idolnamebase[k];
+    idolidmk[i]=idolid[l];
+    }
+    
+    
+	
+	var eventid=  350;//いべんと番号
+	var credit = "BY SKDN";	
+    var rank=0;var targetpage=0;
+		
+	var num, funtext = '';
+	var fundata = new Array(idolname.length);
+	var ownfundata = new Array(idolname.length);
+	var finishdata = '';
+		
+	init();
+		
+	function init(num) {
+    if(typeof num !== 'number'){
+			$('<div/>').css({
+				position: 'fixed',
+				left: 0,
+				top: 0,
+				width: '100%',
+				height: '100%',
+				zIndex: 1000,
+				backgroundColor: 'rgba(0,0,0,.7)',
+				color: '#fff',
+				fontSize: 30,
+				textAlign: 'center',
+				paddingTop: '15em'
+			}).attr('id', '___overlay').text('ランキング集計').appendTo('body');
+      num = 1;
+      //alert('開始します');
+    }
+  		
+		var progress = load(idolname[num - 1],idolidmk[num - 1]);
+  		if(num<=idolname.length && alpha[idolidmk[num - 1] ]!=undefined){
+		$('#___overlay').text("ちーむ"+alpha[idolidmk[num - 1] ]+ idolname[num - 1] + '0位確認中…');
+		}
+		progress.done(function(data100,dataown){
+     
+
+            init(num + 1);
+
+            fundata[num - 1] = data100;
+            
+            
+  		
+  		if(num==idolname.length){
+			$('#___overlay').remove();
+			for(i=0;i<idolname.length;i++){
+			  //finishdata += idolname[i]+ '0位\t' + fundata[i]  +' pt\r\n';
+			  finishdata +=  fundata[i];
+			}
+			
+			var dd = new Date();
+			finishdata += "※" + dtstring(dd) +' 集計時点のポイントです' + targetpage +'位まで\r\n';
+			
+			finishdata = finishdata.replace("undefined","");
+			
+			
+   var d=window.open().document;
+   //d.writeln("<pre>"+finishdata +"</pre>");
+   
+        var
+             w=window
+            ,d=w.document
+            ;
+                //だうんろーどしょり   
+                //location.href="data:attachment/csv,charset=utf-8,download='somedata.csv'"+encodeURIComponent(finishdata)
+                TextDL(finishdata, "500-"+dtstring(dd).replace(/[/ :\-]/g, ""));
+
+                return false;
+            }
+
+        });
+    }
+
+    function TextDL(text, name) {
+        //ファイルを作成
+        b = new Blob([text], {
+            type: "text/plain"
+        })
+
+        //a要素を作る
+        a = document.createElement('a')
+            //ダウンロードする名前をセット
+        a.download = name;
+        //ダウンロードするファイルをセット
+        a.href = window.URL.createObjectURL(b)
+
+        //イベントを作る
+        e = document.createEvent('MouseEvent')
+        e.initEvent("click", true, true)
+            //a要素をクリック
+        a.dispatchEvent(e)
+    }
+	
+	function dtstring(now){
+	var yyyy = now.getFullYear();
+	var mm = now.getMonth() + 1;
+	var dd = now.getDate();
+	var HH = now.getHours();
+	var MM = now.getMinutes();
+if (mm < 10) { mm = '0' + mm;}
+if (dd < 10) { dd = '0' + dd;}
+if (HH < 10) { HH = '0' + HH;}
+if (MM < 10) { MM = '0' + MM;}
+
+	return  (mm + "/" + dd + " " + HH + ":" + MM);
+	}
+
+	function load(id,idol) {
+	
+		var df = $.Deferred();
+		
+		if(num >idolname.length) {df.reject();}
+		
+		var urls='http://imas.gree-apps.net/app/index.php/event/'+ eventid +'/ranking/general?page='+ id +'&idol=' +idol;
+		if(id==0){
+		urls="http://imas.gree-apps.net/app/index.php/event";
+		}
+		
+		
+		var page = get(id,idol,urls);
+		page.done(function(data){
+			var dom = $.parseHTML(data);
+			var temp = null;
+			var data100 ="";
+			var rank ="";
+		  var dataown = null;
+    		 if (id == 0) {
+                $(dom).find('div.event-raid-g-selected-info-border').each(function() {
+                    temp = $(this).text();
+                    if (temp.match(/[0-9]+位まで/) != null) {
+                        var m = temp.match(/[0-9]+位まで/);
+                        //targetpage = m[0].replace(/位まで/gm, "");
+                        targetpage = 500;
+                        
+                        if(targetpage%10){
+						rank=String(parseInt(targetpage/10+1,10));
+						}
+						else{
+						rank=String(parseInt(targetpage/10,10));
+						}
+                        
+                        for(var i=0;i<idolname.length;i++){
+    					idolname[i]=rank;
+    					}
+                        //alert(rank)
+                        //alert(idolname)
+                    }
+                });
+            }
+            else{
+			$(dom).find('td.user-list-st').each(function(){
+				temp = $(this).text();				
+				
+			    var regexp = new RegExp(targetpage+"位", 'g');
+				
+				if( temp.match(regexp) != null) { // /位/　全部,/0位/ 末尾XX0位だけ
+				rank = temp.match(/[0-9]+位/);
+				temp = temp.match(/pt(.*?)pt/);
+          		temp = new String(temp).replace(/,/g, "");
+          		data100 += rank + "の"+ alpha[idol] + "pt\t"
+          				+temp.match(/[0-9]+/)
+          				+ " pt\r\n"	;
+				}
+			});
+			}
+			
+			if(data100 === null) {
+				df.reject();
+			}
+			else {
+			
+				df.resolve(data100,dataown);
+			}
+		});
+		return df.promise();
+	}
+
+	function get(page,team,urls) {
+		var df = $.Deferred();
+		$.ajax({
+		
+			//http://imas.gree-apps.net/app/index.php/event/271/ranking/ula?page=1&team=1
+			//url: 'http://imas.gree-apps.net/app/index.php/event/'+ eventid +'/ranking/ula?page='+ page +'&team=' +team,
+			url: urls,
+			success: function(data){
+				df.resolve(data);
+			}
+		});
+		return df.promise();
+	}
+
+
+})();
